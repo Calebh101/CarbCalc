@@ -39,3 +39,20 @@ Future<bool?> showConfirmDialogue(BuildContext context, String title) async {
     },
   );
 }
+
+void showConstantDialogue(BuildContext context, String title, String message) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [],
+        ),
+      );
+    },
+  );
+}

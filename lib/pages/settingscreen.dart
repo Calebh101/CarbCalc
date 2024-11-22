@@ -31,18 +31,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Open Link?'),
-            content: Text('Do you want to open "$url"? This will open in your default browser.'),
+            content: Text('Do you want to open "$url"? This will open in your default app.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
+                  Navigator.of(context).pop();
                 },
                 child: Text('No'),
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
-                  _launchURL(url); // Open the URL if "Yes" is pressed
+                  Navigator.of(context).pop();
+                  _launchURL(url);
                 },
                 child: Text('Yes'),
               ),
@@ -100,13 +100,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         dataFormat = jsonData["format"];
                       }
                       dataFormat = dataFormat.toDouble();
+                      jsonData["format"] = dataFormat;
                       if (jsonData["format"] == format) {
-                        jsonData["format"] = dataFormat;
                         SharedPreferences prefs = await SharedPreferences.getInstance();
                         await prefs.setString('data', jsonEncode(jsonData));
 
-                        print('Data imported');
-                        showSnackBar(context, "Data imported! Please reload the home page for it to take effect.");
+                        showConstantDialogue(context, "Changes Saved", "Your data has been imported. You will need to close and reopen the app for your changes to take effect.");
                       } else {
                         if (showCarbCalcConvert) {
                           try {
@@ -188,6 +187,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   SharedPreferences prefs = await SharedPreferences.getInstance();
                   await prefs.clear();
                   print("SharedPreferences.data cleared");
+                  showConstantDialogue(context, "Changes Saved", "Your foods data has been reset. You will need to close and reopen the app for your changes to take effect.");
                   setState(() {});
                 }
               }
@@ -204,6 +204,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   SharedPreferences prefs = await SharedPreferences.getInstance();
                   await prefs.setString("data", "");
                   print("SharedPreferences cleared");
+                  showConstantDialogue(context, "Changes Saved", "Your data has been reset. You will need to close and reopen the app for your changes to take effect.");
                   setState(() {});
                 }
               }

@@ -93,6 +93,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
   bool cached = false;
   bool allowCache = false;
   bool isDataReady = false;
+  bool allowNoIcon = false;
 
   // initialize strings and numbers
   String key = "mode";
@@ -121,13 +122,12 @@ class _FoodsWidgetState extends State<FoodsWidget> {
   }
 
   IconData? getIcon(String? icon, bool selected) {
-    if (icon == null) {
-      return null;
-    }
+    icon ??= "unknown";
 
     switch (icon) {
       case "unknown":
-        return selected ? Icons.question_mark : Icons.question_mark_outlined;
+        // ignore: dead_code
+        return !allowNoIcon ? selected ? Icons.question_mark : Icons.question_mark_outlined : null;
       case "fast food":
         return selected ? Icons.fastfood : Icons.fastfood_outlined;
       case "pizza":
@@ -466,7 +466,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
           if (snapshot.data != null) {
             print("data: using set");
             foods = snapshot.data;
-            if (foods["items"][key]["unit"] == null) {
+            if (!foods["items"][key].containsKey("unit")) {
               print("setting unit");
               foods["items"][key]["unit"] = defaultUnit;
             }
@@ -717,8 +717,14 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                       }
                                     )
                                   : SizedBox.shrink(),
-                                SizedBox(width: 8),
-                                Icon(getIcon(foods["items"][key]["items"][index]["icon"], false)),
+                                getIcon(foods["items"][key]["items"][index]["icon"], false) != null || !allowNoIcon ? Row(
+                                  children: [
+                                    SizedBox(width: 8),
+                                    Icon(
+                                      getIcon(foods["items"][key]["items"][index]["icon"], false)
+                                    ),
+                                  ],
+                                ) : SizedBox.shrink(),
                               ],
                             ),
                             title: Text(itemName),
@@ -978,7 +984,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
     final TextEditingController stringController = TextEditingController(text: food["name"]);
     final TextEditingController numberController = TextEditingController(text: formatDouble(food["value"].toDouble()).toString());
 
-    String? selectedOption = allowedIcons.contains((food["icon"] ?? "unknown")) ? food["icon"] : "unknown";
+    String? selectedOption = (allowedIcons.contains((food["icon"] ?? "unknown")) ? food["icon"] : "unknown") ?? "unknown";
     bool useValues = false;
 
     print("edit food: starting");
@@ -1011,12 +1017,16 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                         value: option,
                         child: Row(
                           children: [
-                            Icon(
-                              getIcon(option, false),
-                            ),
-                            SizedBox(width: 6),
+                            allowNoIcon && option != 'unknown' ? Row(
+                              children: [
+                                Icon(
+                                  getIcon(option, false),
+                                ),
+                                SizedBox(width: 6),
+                              ],
+                            ) : SizedBox.shrink(),
                             Text(
-                              option == 'unknown' ? "Other" : toTitleCase(option),
+                              option == 'unknown' ? !allowNoIcon ? "Other" : "No Icon" : toTitleCase(option),
                             ),
                           ],
                         ),
@@ -1080,10 +1090,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
 
     bool useValues = false;
     bool delete = false;
-    Map selectedOption = foods["items"][key]["unit"] ?? units[0];
-
-    selectedOption = units.firstWhere(
-      (unit) => unit['name'] == foods["items"][key]["unit"]['name'],
+    Map selectedOption = units.firstWhere(
+      (unit) => unit['name'] == (foods["items"][key]["unit"]?['name'] ?? ''),
       orElse: () => units[0],
     );
 
