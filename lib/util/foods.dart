@@ -93,7 +93,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
   bool cached = false;
   bool allowCache = false;
   bool isDataReady = false;
-  bool allowNoIcon = false;
+  bool allowNoIcon = true;
 
   // initialize strings and numbers
   String key = "mode";
@@ -719,7 +719,6 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                   : SizedBox.shrink(),
                                 getIcon(foods["items"][key]["items"][index]["icon"], false) != null || !allowNoIcon ? Row(
                                   children: [
-                                    SizedBox(width: 8),
                                     Icon(
                                       getIcon(foods["items"][key]["items"][index]["icon"], false)
                                     ),

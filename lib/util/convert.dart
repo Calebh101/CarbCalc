@@ -11,5 +11,6 @@ Map carbcalcconvert(Map data, double dataFormat) {
       return converted;
   }
 
+  // ignore: dead_code
   return carbcalcconvert(converted, newFormat);
 }
