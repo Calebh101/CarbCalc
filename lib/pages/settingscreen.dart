@@ -163,6 +163,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             SettingTitle(title: "About"),
             Setting(
+              title: "About",
+              desc: "CarbCalc is an application that allows you to log custom foods and use them to calculate carbs (or anything else). It was originally created to replace the Omnipod 5 custom foods feature, which is a very bare part of the app.",
+              text: "",
+              action: () {},
+            ),
+            Setting(
               title: "Version",
               desc: "Version and channel info.",
               text: "Version $version\nChannel: ${beta ? "Beta" : "Stable"}",
@@ -216,7 +222,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          openUrl(context, Uri.parse("mailto:calebh101studios@icloud.com"));
+          openUrl(context, Uri.parse("mailto:calebh101dev@icloud.com"));
         },
         child: Icon(Icons.feedback_outlined),
       ),
