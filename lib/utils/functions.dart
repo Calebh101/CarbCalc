@@ -9,9 +9,6 @@ void showSnackBar(context, String content) {
 }
 
 Future<bool> showAlertDialogue(BuildContext context, String title, String text, bool cancel, Map copy) {
-  if (copy["text"] == null) {
-    copy["text"] = text;
-  }
   return showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -22,7 +19,7 @@ Future<bool> showAlertDialogue(BuildContext context, String title, String text, 
           copy["show"] ? TextButton(
             child: const Text('Copy'),
             onPressed: () {
-              Clipboard.setData(ClipboardData(text: copy["text"]));
+              Clipboard.setData(ClipboardData(text: copy.containsKey("text") ? copy["text"] : text));
               showSnackBar(context, "Copied to clipboard!");
             },
           ) : const SizedBox.shrink(),
