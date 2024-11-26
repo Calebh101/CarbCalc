@@ -379,7 +379,7 @@ packages:
   personal:
     dependency: "direct main"
     description:
-      path: "/developer/projects/dart/packages/personal"
+      path: "/localpkg"
       relative: false
     source: path
     version: "1.0.0"

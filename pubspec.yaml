@@ -43,7 +43,7 @@ dependencies:
   open_settings_plus: ^0.4.0
 
   personal:
-    path: /developer/projects/dart/packages/personal
+    path: /localpkg
 
 dev_dependencies:
   flutter_test:

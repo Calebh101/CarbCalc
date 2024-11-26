@@ -6,13 +6,11 @@ import 'package:carbcalc/util/func.dart';
 import 'package:carbcalc/util/var.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:personal/functions.dart';
 import 'package:personal/widgets.dart';
+import 'package:personal/dialogue.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -23,46 +21,6 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool showCarbCalcConvert = true;
-
-  Future<void> openUrl(BuildContext context, Uri url) async {
-    if (!kIsWeb) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Open Link?'),
-            content: Text('Do you want to open "$url"? This will open in your default app.'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('No'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _launchURL(url);
-                },
-                child: Text('Yes'),
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      Navigator.of(context).pop();
-      _launchURL(url);
-    }
-  }
-
-  Future<void> _launchURL(Uri url) async {
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,7 +150,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 if (response != null) {
                   if (response) {
                     SharedPreferences prefs = await SharedPreferences.getInstance();
-                    await prefs.clear();
+                    await prefs.setString("data", "");
                     print("SharedPreferences.data cleared");
                     showConstantDialogue(context, "Changes Saved", "Your foods data has been reset. You will need to close and reopen the app for your changes to take effect.");
                     setState(() {});
@@ -209,7 +167,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 if (response != null) {
                   if (response) {
                     SharedPreferences prefs = await SharedPreferences.getInstance();
-                    await prefs.setString("data", "");
+                    await prefs.clear();
                     print("SharedPreferences cleared");
                     showConstantDialogue(context, "Changes Saved", "Your data has been reset. You will need to close and reopen the app for your changes to take effect.");
                     setState(() {});
