@@ -146,7 +146,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               desc: "Resets all foods data. This cannot be undone.",
               text: "",
               action: () async {
-                bool? response = await showConfirmDialogue(context, "Are you sure you want to erase foods data? All modes and foods will be erased. This cannot be undone.");
+                bool? response = await showConfirmDialogue(context, "Confirm Action", "Are you sure you want to erase foods data? All modes and foods will be erased. This cannot be undone.");
                 if (response != null) {
                   if (response) {
                     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -163,7 +163,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               desc: "Resets all data and settings. This cannot be undone.",
               text: "",
               action: () async {
-                bool? response = await showConfirmDialogue(context, "Are you sure you want to erase all data? This will delete your foods, modes, and settings. This cannot be undone.");
+                bool? response = await showConfirmDialogue(context, "Confirm Action", "Are you sure you want to erase all data? This will delete your foods, modes, and settings. This cannot be undone.");
                 if (response != null) {
                   if (response) {
                     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -180,7 +180,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          openUrl(context, Uri.parse("mailto:calebh101dev@icloud.com"));
+          openUrlConf(context, Uri.parse("mailto:calebh101dev@icloud.com"));
         },
         child: Icon(Icons.feedback_outlined),
       ),

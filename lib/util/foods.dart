@@ -1201,7 +1201,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
 
     if (delete) {
       print("edit mode: deleting values by conf");
-      bool? response = await showConfirmDialogue(context, "Are you sure you want to delete the mode $key? All the foods in it will be deleted. This cannot be undone.");
+      bool? response = await showConfirmDialogue(context, "Confirm Action", "Are you sure you want to delete the mode $key? All the foods in it will be deleted. This cannot be undone.");
       if (response != null) {
         if (response) {
           foods["items"].remove(key);
