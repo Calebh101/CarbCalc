@@ -376,6 +376,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
+  personal:
+    dependency: "direct main"
+    description:
+      path: "/developer/projects/dart/packages/personal"
+      relative: false
+    source: path
+    version: "1.0.0"
   petitparser:
     dependency: transitive
     description:

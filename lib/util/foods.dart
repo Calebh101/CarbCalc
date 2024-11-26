@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:carbcalc/util/convert.dart';
 import 'package:carbcalc/util/func.dart';
 import 'package:carbcalc/util/var.dart';
-import 'package:carbcalc/utils/functions.dart';
 
 import 'package:flutter/material.dart';
+import 'package:personal/functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FoodsWidget extends StatefulWidget {

@@ -42,6 +42,9 @@ dependencies:
   app_settings: ^5.1.1
   open_settings_plus: ^0.4.0
 
+  personal:
+    path: /developer/projects/dart/packages/personal
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

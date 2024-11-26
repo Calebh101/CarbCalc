@@ -1,6 +1,6 @@
 import 'package:carbcalc/util/var.dart';
-import 'package:carbcalc/utils/functions.dart';
 import 'package:flutter/material.dart';
+import 'package:personal/functions.dart';
 
 void showBetaWarning(context, bool overrideWarningBool) {
   if (beta && (betaWarning || overrideWarningBool)) {
