@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:carbcalc/util/convert.dart';
 import 'package:carbcalc/util/func.dart';
 import 'package:carbcalc/util/var.dart';
 
+import 'package:personal/functions.dart';
 import 'package:personal/dialogue.dart';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,17 +32,15 @@ class _FoodsWidgetState extends State<FoodsWidget> {
           {
             "name": "a food",
             "value": 1,
-            "icon": "fast food"
           },
           {
             "name": "c food 2",
             "value": 5,
-            "icon": "chocolate"
           },
           {
             "name": "b food 3",
             "value": 4,
-            "icon": "fast food"
+            "serving": "3 cups",
           }
         ],
       },
@@ -48,12 +49,10 @@ class _FoodsWidgetState extends State<FoodsWidget> {
           {
             "name": "c food 3",
             "value": 3,
-            "icon": "pizza"
           },
           {
             "name": "d food 4",
             "value": 4,
-            "icon": "fast food"
           }
         ],
       },
@@ -79,7 +78,61 @@ class _FoodsWidgetState extends State<FoodsWidget> {
       "unit": "milligrams",
       "abbr": "mg",
     },
-  ];
+    {
+      "name": "fat",
+      "init": "fat",
+      "unit": "grams",
+      "abbr": "g",
+    },
+    {
+      "name": "fiber",
+      "init": "fiber",
+      "unit": "grams",
+      "abbr": "g",
+    },
+    {
+      "name": "sugar",
+      "init": "sugar",
+      "unit": "grams",
+      "abbr": "g",
+    },
+    {
+      "name": "calories",
+      "init": "cal",
+      "unit": "kilocalories",
+      "abbr": "kcal",
+    },
+    {
+      "name": "cholesterol",
+      "init": "chol",
+      "unit": "milligrams",
+      "abbr": "mg",
+    },
+    {
+      "name": "vitamin C",
+      "init": "vit_c",
+      "unit": "milligrams",
+      "abbr": "mg",
+    },
+    {
+      "name": "calcium",
+      "init": "calcium",
+      "unit": "milligrams",
+      "abbr": "mg",
+    },
+    {
+      "name": "iron",
+      "init": "iron",
+      "unit": "milligrams",
+      "abbr": "mg",
+    },
+    {
+      "name": "potassium",
+      "init": "potassium",
+      "unit": "milligrams",
+      "abbr": "mg",
+    },
+];
 
   // initialize json storage
   Future<Map<String, dynamic>>? cache;
@@ -107,13 +160,6 @@ class _FoodsWidgetState extends State<FoodsWidget> {
   // initializing text controllers
   final TextEditingController _extraController = TextEditingController();
 
-  // initialize lists
-  List allowedIcons = [
-    "unknown",
-    "fast food",
-    "pizza",
-  ];
-
   @override
   void initState() {
     print("FOODS.DART");
@@ -126,7 +172,6 @@ class _FoodsWidgetState extends State<FoodsWidget> {
 
     switch (icon) {
       case "unknown":
-        // ignore: dead_code
         return !allowNoIcon ? selected ? Icons.question_mark : Icons.question_mark_outlined : null;
       case "fast food":
         return selected ? Icons.fastfood : Icons.fastfood_outlined;
@@ -656,7 +701,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                         child: Row(
                           children: [
                             Icon(
-                              Icons.calculate_outlined,
+                              Icons.calculate,
                             ),
                             SizedBox(width: 6),
                             Text("Calculations"),
@@ -691,6 +736,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                         buildDefaultDragHandles: allowReorderHandles(),
                         itemCount: foods["items"][key]["items"].length,
                         itemBuilder: (context, index) {
+                          Map currentItem = foods["items"][key]["items"][index];
                           String itemName = foods["items"][key]["items"][index]["name"];
                           double itemValue = foods["items"][key]["items"][index]["value"].toDouble();
                           return ListTile(
@@ -717,17 +763,26 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                       }
                                     )
                                   : SizedBox.shrink(),
-                                getIcon(foods["items"][key]["items"][index]["icon"], false) != null || !allowNoIcon ? Row(
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(
-                                      getIcon(foods["items"][key]["items"][index]["icon"], false)
+                                    Text(
+                                      itemName,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${formatDouble(itemValue).toString()}${unit["abbr"]}$per${currentItem.containsKey("serving") ? currentItem["serving"] : "serving"}',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                      ),
                                     ),
                                   ],
-                                ) : SizedBox.shrink(),
+                                ),
                               ],
                             ),
-                            title: Text(itemName),
-                            subtitle: Text('Amount: ${formatDouble(itemValue).toString()}${unit["abbr"]}'),
                             trailing: mode == 1
                                 ? Row(
                                     mainAxisSize: MainAxisSize.min,
@@ -982,8 +1037,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
 
     final TextEditingController stringController = TextEditingController(text: food["name"]);
     final TextEditingController numberController = TextEditingController(text: formatDouble(food["value"].toDouble()).toString());
+    final TextEditingController servingController = TextEditingController(text: food.containsKey("serving") ? food["serving"] : "serving");
 
-    String? selectedOption = (allowedIcons.contains((food["icon"] ?? "unknown")) ? food["icon"] : "unknown") ?? "unknown";
     bool useValues = false;
 
     print("edit food: starting");
@@ -1009,33 +1064,9 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                     keyboardType: TextInputType.number,
                   ),
                   const SizedBox(height: 10),
-                  DropdownButtonFormField<Object>(
-                    value: selectedOption,
-                    items: allowedIcons
-                      .map((option) => DropdownMenuItem(
-                        value: option,
-                        child: Row(
-                          children: [
-                            allowNoIcon && option != 'unknown' ? Row(
-                              children: [
-                                Icon(
-                                  getIcon(option, false),
-                                ),
-                                SizedBox(width: 6),
-                              ],
-                            ) : SizedBox.shrink(),
-                            Text(
-                              option == 'unknown' ? !allowNoIcon ? "Other" : "No Icon" : toTitleCase(option),
-                            ),
-                          ],
-                        ),
-                      )).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedOption = value.toString();
-                      });
-                    },
-                    decoration: const InputDecoration(labelText: 'Icon'),
+                  TextField(
+                    controller: servingController,
+                    decoration: const InputDecoration(labelText: 'Serving size'),
                   ),
                 ],
               );
@@ -1065,7 +1096,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
       print("edit food: using values");
 
       String name = stringController.text == '' ? food["name"] : stringController.text;
-      String icon = selectedOption ?? food["icon"] ?? "unknown";
+      String serving = servingController.text == '' ? food.containsKey("serving") ? food["serving"] : "serving" : servingController.text;
       double? inputNumber = double.tryParse(numberController.text);
       double value = (inputNumber != null && validateNumber(inputNumber)) 
         ? inputNumber 
@@ -1073,7 +1104,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
 
       food["name"] = name;
       food["value"] = value;
-      food["icon"] = icon;
+      food["serving"] = serving;
     } else {
       print("edit food: not using values");
     }
@@ -1120,7 +1151,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                       child: Row(
                         children: [
                           Text(
-                            "${option['name']} - ${option["unit"]}",
+                            "${toSentenceCase(option['name'])} - ${option["unit"]}",
                           ),
                         ],
                       ),
@@ -1218,17 +1249,6 @@ class _FoodsWidgetState extends State<FoodsWidget> {
     print("edit mode: complete");
     return foods;
   }
-
-  String toTitleCase(String input) {
-    if (input.isEmpty) return input;
-
-    return input
-      .split(' ')
-      .map((word) => word.isNotEmpty
-        ? '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}'
-        : word)
-      .join(' ');
-  }
 }
 
 class CalculationsPage extends StatefulWidget {
@@ -1269,6 +1289,17 @@ class _CalculationsPageState extends State<CalculationsPage> {
     return total;
   }
 
+  String getCalculationsText(List items, Map counters) {
+    String text = "CarbCalc Calculations\nAutomatically generated by user input\n";
+
+    items.forEach((item) {
+      text += "\n${item["name"]} (${item["value"].toDouble()}${widget.unit["abbr"]}$per${item.containsKey("serving") ? item["serving"] : "serving"}): ${counters[item["name"]]} servings, ${counters[item["name"]] * item["value"]}${widget.unit["abbr"]} total";
+    });
+
+    text += "\n\nExtra: ${widget.extraAmount}${widget.unit["abbr"]}\nSubtotal: ${calculateTotal(2)}${widget.unit["abbr"]}\nTotal: ${calculateTotal(1)}${widget.unit["abbr"]}";
+    return text;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1277,6 +1308,15 @@ class _CalculationsPageState extends State<CalculationsPage> {
           onPressed: () {Navigator.pop(context);},
           icon: Icon(Icons.arrow_back)
         ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              String result = getCalculationsText(widget.data["items"][widget.keyS]["items"], widget.counters);
+              shareFile(true, "CarbCalc Calculations", await File('result.txt').writeAsString(result), result);
+            },
+            icon: Icon(Icons.ios_share),
+          ),
+        ],
         title: Text("Calculations"),
         centerTitle: true
       ),
@@ -1286,6 +1326,7 @@ class _CalculationsPageState extends State<CalculationsPage> {
             child: ListView.builder(
               itemCount: widget.data["items"][widget.keyS]["items"].length,
               itemBuilder: (context, index) {
+                Map currentItem = widget.data["items"][widget.keyS]["items"][index];
                 return ListTile(
                   title: Text(
                     widget.data["items"][widget.keyS]["items"][index]["name"],
@@ -1294,7 +1335,7 @@ class _CalculationsPageState extends State<CalculationsPage> {
                     )
                   ),
                   subtitle: Text(
-                    "${widget.data["items"][widget.keyS]["items"][index]["value"].toDouble()}${widget.unit["abbr"]}/serving",
+                    "${widget.data["items"][widget.keyS]["items"][index]["value"].toDouble()}${widget.unit["abbr"]}$per${currentItem.containsKey("serving") ? currentItem["serving"] : "serving"}",
                     style: TextStyle(
                       fontSize: 15
                     )

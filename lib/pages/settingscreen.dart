@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:personal/widgets.dart';
 import 'package:personal/dialogue.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -106,17 +105,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 final directory = await getApplicationDocumentsDirectory();
                 final file = File('${directory.path}/data.json');
                 File file2 = await file.writeAsString(json);
-        
-                try {
-                  await Share.shareXFiles([XFile(file2.path)], text: 'CarbCalc foods:');
-                } catch (e) {
-                  try {
-                    print("Unable to Share.shareXFiles: falling back on Share.share: $e");
-                    await Share.share(json, subject: "CarbCalc foods");
-                  } catch (e2) {
-                    print("Unable to Share.share: $e2");
-                  }
-                }
+                shareFile(true, "CarbCalc Foods", file2, json);
               },
             ),
             SettingTitle(title: "About"),

@@ -3,3 +3,5 @@ double format = 2.2;
 
 bool beta = true;
 bool betaWarning = false;
+
+String per = " / ";

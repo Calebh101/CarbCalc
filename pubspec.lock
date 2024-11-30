@@ -417,6 +417,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.2"
+  quick_navbar:
+    dependency: "direct main"
+    description:
+      name: quick_navbar
+      sha256: "0945a64cc019ac2bb9f3c0db72dcde87bcb35b6a94af817da95c5019e4e31729"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   share_plus:
     dependency: "direct main"
     description:

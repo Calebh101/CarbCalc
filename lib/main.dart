@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:carbcalc/pages/homescreen.dart';
 import 'package:carbcalc/pages/settingscreen.dart';
 import 'package:flutter/rendering.dart';
+import 'package:quick_navbar/quick_navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late Future<Map<String, dynamic>> cache;
@@ -54,7 +55,18 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       themeMode: ThemeMode.system,
-      home: HomePage(),
+      home: QuickNavBar(items: [
+        {
+          "label": "Home",
+          "icon": Icons.home,
+          "widget": HomeScreen(),
+        },
+        {
+          "label": "Settings",
+          "icon": Icons.settings,
+          "widget": SettingsScreen(),
+        },
+      ], selectedColor: Colors.orange),
     );
   }
 }
