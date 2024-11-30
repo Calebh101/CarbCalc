@@ -33,7 +33,7 @@ dependencies:
 
   personal:
     git:
-      url: https://github.com/Calebh101/localpkg-flutter.git
+      url: https://github.com/Calebh101/localpkg-flutter
       ref: main
 
   icons_plus: ^5.0.0

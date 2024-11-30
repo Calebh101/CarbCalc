@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:carbcalc/util/convert.dart';
 import 'package:carbcalc/util/func.dart';
@@ -1375,8 +1374,7 @@ class _CalculationsPageState extends State<CalculationsPage> {
                   String result = getCalculationsText(
                       widget.data["items"][widget.keyS]["items"],
                       widget.counters);
-                  shareFile(true, "CarbCalc Calculations",
-                      await File('result.txt').writeAsString(result), result);
+                  shareTextFile(true, "CarbCalc Calculations", result, "txt");
                 },
                 icon: Icon(Icons.ios_share),
               ),

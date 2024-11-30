@@ -2,11 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:carbcalc/util/convert.dart';
-import 'package:carbcalc/util/func.dart';
 import 'package:carbcalc/util/var.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:personal/functions.dart';
 import 'package:personal/widgets.dart';
 import 'package:personal/dialogue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -102,33 +101,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               action: () async {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 String json = jsonEncode(prefs.get("data"));
-                final directory = await getApplicationDocumentsDirectory();
-                final file = File('${directory.path}/data.json');
-                File file2 = await file.writeAsString(json);
-                shareFile(true, "CarbCalc Foods", file2, json);
+                shareTextFile(true, "CarbCalc Foods", json, "json");
               },
             ),
-            SettingTitle(title: "About"),
-            Setting(
-              title: "About",
-              desc: "CarbCalc is an application that allows you to log custom foods and use them to calculate carbs (or anything else). It was originally created to replace the Omnipod 5 custom foods feature, which is a very bare part of the app.",
-              text: "",
-              action: () {},
-            ),
-            Setting(
-              title: "Version",
-              desc: "Version and channel info.",
-              text: "Version $version\nChannel: ${beta ? "Beta" : "Stable"}",
-              action: () {
-                showBetaWarning(context, false);
-              },
-            ),
-            Setting(
-              title: "Author",
-              desc: "Author and owner information.",
-              text: "Author: Calebh101",
-              action: () {},
-            ),
+            AboutSettings(context: context, version: version, beta: beta, about: "CarbCalc is an application that allows you to log custom foods and use them to calculate carbs (or anything else). It was originally created to replace the Omnipod 5 custom foods feature, which is a very bare part of the app."),
             SettingTitle(title: "Reset"),
             Setting(
               title: "Reset Foods Data",

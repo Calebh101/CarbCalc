@@ -381,10 +381,10 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "9e7c3661a48fdff20ec8737c8a85255b3f87ed7f"
-      url: "https://github.com/Calebh101/localpkg-flutter.git"
+      resolved-ref: "8a0fecb2df96e54a244558a91494fcab1a3c985a"
+      url: "https://github.com/Calebh101/localpkg-flutter"
     source: git
-    version: "1.0.0"
+    version: "1.0.1"
   petitparser:
     dependency: transitive
     description:
