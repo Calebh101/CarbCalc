@@ -14,10 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class FoodsWidget extends StatefulWidget {
   final String title;
 
-  const FoodsWidget({
-    super.key,
-    required this.title
-  });
+  const FoodsWidget({super.key, required this.title});
 
   @override
   State<FoodsWidget> createState() => _FoodsWidgetState();
@@ -132,7 +129,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
       "unit": "milligrams",
       "abbr": "mg",
     },
-];
+  ];
 
   // initialize json storage
   Future<Map<String, dynamic>>? cache;
@@ -153,7 +150,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
   String? sortMode = "custom";
   double extraAmount = 0;
   int mode = 1;
-  
+
   // initialize uninitialized variables (what?)
   late List<String> keys;
 
@@ -172,7 +169,11 @@ class _FoodsWidgetState extends State<FoodsWidget> {
 
     switch (icon) {
       case "unknown":
-        return !allowNoIcon ? selected ? Icons.question_mark : Icons.question_mark_outlined : null;
+        return !allowNoIcon
+            ? selected
+                ? Icons.question_mark
+                : Icons.question_mark_outlined
+            : null;
       case "fast food":
         return selected ? Icons.fastfood : Icons.fastfood_outlined;
       case "pizza":
@@ -238,7 +239,9 @@ class _FoodsWidgetState extends State<FoodsWidget> {
       print("Not cached or disabled cache: loading");
       final prefs = await SharedPreferences.getInstance();
       String? jsonString = prefs.getString("data");
-      if (jsonString != null && isValidJson(jsonString) && prefs.containsKey("data")) {
+      if (jsonString != null &&
+          isValidJson(jsonString) &&
+          prefs.containsKey("data")) {
         print("Loaded jsonString into data");
         cache = Future.value(jsonDecode(jsonString));
         cached = true;
@@ -271,27 +274,36 @@ class _FoodsWidgetState extends State<FoodsWidget> {
   }
 
   Map<String, dynamic> sortList(String mode, data) {
-    List sortedItems = jsonDecode(jsonEncode(data["items"][key]["items"])) as List;
+    List sortedItems =
+        jsonDecode(jsonEncode(data["items"][key]["items"])) as List;
 
-    switch(mode) {
+    switch (mode) {
       case "custom":
         sortedItems = data["items"][key]["items"];
       case "alphabetical (a to z)":
-        sortedItems = List<Map<String, dynamic>>.from(data["items"][key]["items"] as List<dynamic>)..sort((a, b) {
-          return (a['name'] as String).compareTo(b['name'] as String);
-        });
+        sortedItems = List<Map<String, dynamic>>.from(
+            data["items"][key]["items"] as List<dynamic>)
+          ..sort((a, b) {
+            return (a['name'] as String).compareTo(b['name'] as String);
+          });
       case "alphabetical (z to a)":
-        sortedItems = List<Map<String, dynamic>>.from(data["items"][key]["items"] as List<dynamic>)..sort((a, b) {
-          return (b['name'] as String).compareTo(a['name'] as String);
-        });
+        sortedItems = List<Map<String, dynamic>>.from(
+            data["items"][key]["items"] as List<dynamic>)
+          ..sort((a, b) {
+            return (b['name'] as String).compareTo(a['name'] as String);
+          });
       case "value (highest to lowest)":
-        sortedItems = List<Map<String, dynamic>>.from(data["items"][key]["items"] as List<dynamic>)..sort((a, b) {
-          return (b['value'] as num).compareTo(a['value'] as num);
-        });
+        sortedItems = List<Map<String, dynamic>>.from(
+            data["items"][key]["items"] as List<dynamic>)
+          ..sort((a, b) {
+            return (b['value'] as num).compareTo(a['value'] as num);
+          });
       case "value (lowest to highest)":
-        sortedItems = List<Map<String, dynamic>>.from(data["items"][key]["items"] as List<dynamic>)..sort((a, b) {
-          return (a['value'] as num).compareTo(b['value'] as num);
-        });
+        sortedItems = List<Map<String, dynamic>>.from(
+            data["items"][key]["items"] as List<dynamic>)
+          ..sort((a, b) {
+            return (a['value'] as num).compareTo(b['value'] as num);
+          });
       default:
         sortedItems = data["items"][key]["items"];
     }
@@ -354,24 +366,23 @@ class _FoodsWidgetState extends State<FoodsWidget> {
     refresh(1, data);
   }
 
-  Future<String?> _showSelectionDialog(BuildContext context, List array, String title) async {
+  Future<String?> _showSelectionDialog(
+      BuildContext context, List array, String title) async {
     return showDialog<String>(
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
           title: Text("Select a $title..."),
           children: array.map((option) {
-            print("option(lowercase), sortMode: ${option.toLowerCase()}, $sortMode");
+            print(
+                "option(lowercase), sortMode: ${option.toLowerCase()}, $sortMode");
             return SimpleDialogOption(
               onPressed: () {
                 Navigator.pop(context, option);
               },
               child: Row(
                 children: [
-                  if (option.toLowerCase() == sortMode) 
-                    Icon(
-                      Icons.check
-                    ),
+                  if (option.toLowerCase() == sortMode) Icon(Icons.check),
                   SizedBox(width: 8),
                   Text(option),
                 ],
@@ -384,12 +395,10 @@ class _FoodsWidgetState extends State<FoodsWidget> {
   }
 
   Future<String?> showAddDialogue(BuildContext context) async {
-    List array = [
-      "Item",
-      "Mode"
-    ];
+    List array = ["Item", "Mode"];
 
-    String title = "new item to add"; // This is because I copied _showSelectionDialogue and I was too lazy to change the text lol
+    String title =
+        "new item to add"; // This is because I copied _showSelectionDialogue and I was too lazy to change the text lol
 
     return showDialog<String>(
       context: context,
@@ -403,10 +412,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
               },
               child: Row(
                 children: [
-                  if (option == sortMode) 
-                    Icon(
-                      Icons.check
-                    ),
+                  if (option == sortMode) Icon(Icons.check),
                   SizedBox(width: 8),
                   Text(option),
                 ],
@@ -417,7 +423,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
       },
     );
   }
-  
+
   Future<String> showTextInput(String title) async {
     String inputText = '';
     String userInput = '';
@@ -456,8 +462,10 @@ class _FoodsWidgetState extends State<FoodsWidget> {
     return userInput;
   }
 
-  Future<double?> _showNumberInputDialog(BuildContext context, double defaultAmount) async {
-    TextEditingController numberController = TextEditingController(text: formatDouble(defaultAmount).toString());
+  Future<double?> _showNumberInputDialog(
+      BuildContext context, double defaultAmount) async {
+    TextEditingController numberController =
+        TextEditingController(text: formatDouble(defaultAmount).toString());
 
     return showDialog<double?>(
       context: context,
@@ -491,7 +499,11 @@ class _FoodsWidgetState extends State<FoodsWidget> {
   }
 
   bool allowReorderHandles() {
-    return mode == 1 ? false : mode == 2 && sortMode == "custom" && allowCustomReorder ? true : false;
+    return mode == 1
+        ? false
+        : mode == 2 && sortMode == "custom" && allowCustomReorder
+            ? true
+            : false;
   }
 
   @override
@@ -526,506 +538,535 @@ class _FoodsWidgetState extends State<FoodsWidget> {
 
           return Scaffold(
             appBar: AppBar(
-              leading: Tooltip(
-                message: "Switch mode",
-                child: IconButton(
-                  onPressed: () {
-                    selectMode(context, foods);
-                  },
-                  icon: Icon(
-                    Icons.menu
-                  )
-                ),
-              ),
-              actions: [
-                Tooltip(
-                  message: "Show options",
-                  child: PopupMenuButton(
-                    icon: Icon(Icons.more_vert),
-                    onSelected: (String value) async {
-                      if (value == 'blank') {
-                        print("blank action called");
-                      } else if (value == 'refresh') {
-                        refresh(1, await getData());
-                      } else if (value == 'edit') {
-                        mode = mode == 1 ? 2 : 1;
-                        refresh(1, foods);
-                      } else if (value == 'add') {
-                        String? response = await showAddDialogue(context);
-                        Map? response2;
-                  
-                        if (response != null) {
-                          if (response == 'Mode') {
-                            response2 = {"name": await showTextInput(response)};
-                          } else if (response == 'Item') {
-                            response2 = await editItem({"name": "", "value": 0, "icon": ""}, 2);
-                          }
-                        }
-                        if (response2 == "error") {
-                          print("Error occurred with response2: unknown");
-                          showAlertDialogue(context, "Error", "There was an error with your response.", false, {"show": false});
-                        }
-                        if (response2 == "invalid") {
-                          print("Error occurred with response2: invalid");
-                          showAlertDialogue(context, "Error", "Your response was invalid.", false, {"show": false});
-                        }
-                        if (response != null && (response2 != null && response2["name"] != '')) {
-                          setState(() {
-                            switch(response) {
-                              case "Item":
-                                print("Item added: $response2");
-                                foods["items"][key]["items"].add(response2);
-                                saveData(foods);
-                              case "Mode":
-                                print("Mode added: $response2");
-                                foods["items"][response2!["name"]] = {"items":[{"name": "My First Food", "value": 0, "icon": "fast food"}]};
-                                changeMode(response2["name"]!, foods);
-                                saveData(foods);
-                              default:
-                                print("Unable to judge dialogue choice: $response");
-                                showAlertDialogue(context, "Error", "Unable to judge your chosen item.", false, {"show": false});
-                            }
-                          });
-                        }
-                      } else if (value == 'sort') {
-                        List sortOptions = ["Alphabetical (A to Z)", "Alphabetical (Z to A)", "Value (lowest to highest)", "Value (highest to lowest)"];
-                        if (allowCustomReorder) {
-                          sortOptions.add("Custom");
-                        }
-                  
-                        sortMode = await _showSelectionDialog(context, sortOptions, "sorting option");
-                  
-                        if (sortMode != null) {
-                          sortMode = sortMode!.toLowerCase();
-                        } else {
-                          sortMode = "custom";
-                        }
-                  
-                        setState(() {
-                          print("sort: $sortMode");
-                          refresh(1, sortList(sortMode!, foods));
-                        });
-                      } else if (value == 'calculate') {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => CalculationsPage(data: foods, counters: counters, keyS: key, extraAmount: extraAmount, unit: unit)),
-                        );
-                      } else if (value == 'modeChange') {
+                leading: Tooltip(
+                  message: "Switch mode",
+                  child: IconButton(
+                      onPressed: () {
                         selectMode(context, foods);
-                      } else if (value == 'modeEdit') {
-                        foods = await editMode(foods, true);
-                        print(foods);
-                        refresh(1, foods);
-                        init();
-                      } else {
-                        print("Unresolved condition: PopupMenuButton(value): $value");
-                      }
-                    },
-                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                      PopupMenuItem(
-                        value: "add",
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.add,
-                            ),
-                            SizedBox(width: 6),
-                            Text("Add"),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: "edit",
-                        child: Row(
-                          children: [
-                            Icon(
-                              mode == 1 ? Icons.edit : Icons.calculate,
-                            ),
-                            SizedBox(width: 6),
-                            Text(
-                              mode == 1 ? "Edit" : "Calculate",
-                            ),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: "sort",
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.swap_vert,
-                            ),
-                            SizedBox(width: 6),
-                            Text("Sort"),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: "modeChange",
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.multiple_stop,
-                            ),
-                            SizedBox(width: 6),
-                            Text("Change Mode"),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: "modeEdit",
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.edit,
-                            ),
-                            SizedBox(width: 6),
-                            Text("Edit Mode"),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: "refresh",
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.refresh,
-                            ),
-                            SizedBox(width: 6),
-                            Text("Refresh")
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: "calculate",
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.calculate,
-                            ),
-                            SizedBox(width: 6),
-                            Text("Calculations"),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: "blank",
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.close,
-                            ),
-                            SizedBox(width: 6),
-                            Text("Close"),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                      },
+                      icon: Icon(Icons.menu)),
                 ),
-              ],
-              title: Text("${widget.title} - $key"),
-              centerTitle: true
-            ),
-            body: Stack(
-              children: [
-                Column(
-                  children: [
-                    Expanded(
-                      child: ReorderableListView.builder(
-                        buildDefaultDragHandles: allowReorderHandles(),
-                        itemCount: foods["items"][key]["items"].length,
-                        itemBuilder: (context, index) {
-                          Map currentItem = foods["items"][key]["items"][index];
-                          String itemName = foods["items"][key]["items"][index]["name"];
-                          double itemValue = foods["items"][key]["items"][index]["value"].toDouble();
-                          return ListTile(
-                            key: ValueKey(itemName),
-                            leading: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                  counters[itemName] != 0 && mode == 1 ? IconButton(
+                actions: [
+                  Tooltip(
+                    message: "Show options",
+                    child: PopupMenuButton(
+                      icon: Icon(Icons.more_vert),
+                      onSelected: (String value) async {
+                        if (value == 'blank') {
+                          print("blank action called");
+                        } else if (value == 'refresh') {
+                          refresh(1, await getData());
+                        } else if (value == 'edit') {
+                          mode = mode == 1 ? 2 : 1;
+                          refresh(1, foods);
+                        } else if (value == 'add') {
+                          String? response = await showAddDialogue(context);
+                          Map? response2;
+
+                          if (response != null) {
+                            if (response == 'Mode') {
+                              response2 = {
+                                "name": await showTextInput(response)
+                              };
+                            } else if (response == 'Item') {
+                              response2 = await editItem(
+                                  {"name": "", "value": 0, "icon": ""}, 2);
+                            }
+                          }
+                          if (response2 == "error") {
+                            print("Error occurred with response2: unknown");
+                            showAlertDialogue(
+                                context,
+                                "Error",
+                                "There was an error with your response.",
+                                false,
+                                {"show": false});
+                          }
+                          if (response2 == "invalid") {
+                            print("Error occurred with response2: invalid");
+                            showAlertDialogue(
+                                context,
+                                "Error",
+                                "Your response was invalid.",
+                                false,
+                                {"show": false});
+                          }
+                          if (response != null &&
+                              (response2 != null && response2["name"] != '')) {
+                            setState(() {
+                              switch (response) {
+                                case "Item":
+                                  print("Item added: $response2");
+                                  foods["items"][key]["items"].add(response2);
+                                  saveData(foods);
+                                case "Mode":
+                                  print("Mode added: $response2");
+                                  foods["items"][response2!["name"]] = {
+                                    "items": [
+                                      {
+                                        "name": "My First Food",
+                                        "value": 0,
+                                        "icon": "fast food"
+                                      }
+                                    ]
+                                  };
+                                  changeMode(response2["name"]!, foods);
+                                  saveData(foods);
+                                default:
+                                  print(
+                                      "Unable to judge dialogue choice: $response");
+                                  showAlertDialogue(
+                                      context,
+                                      "Error",
+                                      "Unable to judge your chosen item.",
+                                      false,
+                                      {"show": false});
+                              }
+                            });
+                          }
+                        } else if (value == 'sort') {
+                          List sortOptions = [
+                            "Alphabetical (A to Z)",
+                            "Alphabetical (Z to A)",
+                            "Value (lowest to highest)",
+                            "Value (highest to lowest)"
+                          ];
+                          if (allowCustomReorder) {
+                            sortOptions.add("Custom");
+                          }
+
+                          sortMode = await _showSelectionDialog(
+                              context, sortOptions, "sorting option");
+
+                          if (sortMode != null) {
+                            sortMode = sortMode!.toLowerCase();
+                          } else {
+                            sortMode = "custom";
+                          }
+
+                          setState(() {
+                            print("sort: $sortMode");
+                            refresh(1, sortList(sortMode!, foods));
+                          });
+                        } else if (value == 'calculate') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CalculationsPage(
+                                    data: foods,
+                                    counters: counters,
+                                    keyS: key,
+                                    extraAmount: extraAmount,
+                                    unit: unit)),
+                          );
+                        } else if (value == 'modeChange') {
+                          selectMode(context, foods);
+                        } else if (value == 'modeEdit') {
+                          foods = await editMode(foods, true);
+                          print(foods);
+                          refresh(1, foods);
+                          init();
+                        } else {
+                          print(
+                              "Unresolved condition: PopupMenuButton(value): $value");
+                        }
+                      },
+                      itemBuilder: (BuildContext context) =>
+                          <PopupMenuEntry<String>>[
+                        PopupMenuItem(
+                          value: "add",
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.add,
+                              ),
+                              SizedBox(width: 6),
+                              Text("Add"),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: "edit",
+                          child: Row(
+                            children: [
+                              Icon(
+                                mode == 1 ? Icons.edit : Icons.calculate,
+                              ),
+                              SizedBox(width: 6),
+                              Text(
+                                mode == 1 ? "Edit" : "Calculate",
+                              ),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: "sort",
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.swap_vert,
+                              ),
+                              SizedBox(width: 6),
+                              Text("Sort"),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: "modeChange",
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.multiple_stop,
+                              ),
+                              SizedBox(width: 6),
+                              Text("Change Mode"),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: "modeEdit",
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.edit,
+                              ),
+                              SizedBox(width: 6),
+                              Text("Edit Mode"),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: "refresh",
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.refresh,
+                              ),
+                              SizedBox(width: 6),
+                              Text("Refresh")
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: "calculate",
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.calculate,
+                              ),
+                              SizedBox(width: 6),
+                              Text("Calculations"),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: "blank",
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.close,
+                              ),
+                              SizedBox(width: 6),
+                              Text("Close"),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+                title: Text("${widget.title} - $key"),
+                centerTitle: true),
+            body: Stack(children: [
+              Column(
+                children: [
+                  Expanded(
+                    child: ReorderableListView.builder(
+                      buildDefaultDragHandles: allowReorderHandles(),
+                      itemCount: foods["items"][key]["items"].length,
+                      itemBuilder: (context, index) {
+                        Map currentItem = foods["items"][key]["items"][index];
+                        String itemName =
+                            foods["items"][key]["items"][index]["name"];
+                        double itemValue = foods["items"][key]["items"][index]
+                                ["value"]
+                            .toDouble();
+                        return ListTile(
+                          key: ValueKey(itemName),
+                          leading: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              counters[itemName] != 0 && mode == 1
+                                  ? IconButton(
                                       icon: Icon(Icons.check_box_outlined),
                                       iconSize: 25,
                                       onPressed: () {
                                         setState(() {
                                           counters[itemName] = 0;
                                         });
-                                      }
-                                    )
-                                  : mode == 1 ? IconButton(
-                                      icon: Icon(Icons.check_box_outline_blank),
-                                      iconSize: 25,
-                                      onPressed: () {
-                                        setState(() {
-                                          counters[itemName] = 1;
-                                        });
-                                      }
-                                    )
-                                  : SizedBox.shrink(),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      itemName,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    Text(
-                                      '${formatDouble(itemValue).toString()}${unit["abbr"]}$per${currentItem.containsKey("serving") ? currentItem["serving"] : "serving"}',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            trailing: mode == 1
-                                ? Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SizedBox(
-                                        width: 40,
-                                        height: 40,
-                                        child: ElevatedButton(
+                                      })
+                                  : mode == 1
+                                      ? IconButton(
+                                          icon: Icon(
+                                              Icons.check_box_outline_blank),
+                                          iconSize: 25,
                                           onPressed: () {
                                             setState(() {
-                                              if (validateNumber(counters[itemName]! + 1)) {
-                                                counters[itemName] = (counters[itemName]! + 1);
-                                              }
+                                              counters[itemName] = 1;
                                             });
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            padding: EdgeInsets.all(8),
-                                          ),
-                                          child: Icon(
-                                            Icons.add,
-                                            size: 25
-                                          ),
-                                        ),
-                                      ),
-                                      InkWell(
-                                        borderRadius: BorderRadius.circular(12),
-                                        onTap: () async {
-                                          var response = await _showNumberInputDialog(context, counters[itemName]!);
+                                          })
+                                      : SizedBox.shrink(),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    itemName,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${formatDouble(itemValue).toString()}${unit["abbr"]}$per${currentItem.containsKey("serving") ? currentItem["serving"] : "serving"}',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          trailing: mode == 1
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                      width: 40,
+                                      height: 40,
+                                      child: ElevatedButton(
+                                        onPressed: () {
                                           setState(() {
-                                            if (response != null && validateNumber(response)) {
-                                              counters[itemName] = response;
+                                            if (validateNumber(
+                                                counters[itemName]! + 1)) {
+                                              counters[itemName] =
+                                                  (counters[itemName]! + 1);
                                             }
                                           });
                                         },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(8.0),
-                                          decoration: BoxDecoration(
-                                            color: Colors.transparent,
-                                          ),
-                                          child: Text(
-                                            (() {
-                                              if (counters[itemName] == null) {
-                                                counters[itemName] = 0;
-                                              }
-                                              return formatDouble(counters[itemName]!).toString();
-                                            })(),
-                                            style: TextStyle(fontSize: 20.0),
-                                          ),
+                                        style: ElevatedButton.styleFrom(
+                                          padding: EdgeInsets.all(8),
                                         ),
+                                        child: Icon(Icons.add, size: 25),
                                       ),
-                                      SizedBox(
-                                        width: 40,
-                                        height: 40,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              if (validateNumber(counters[itemName]! - 1)) {
-                                                counters[itemName] = counters[itemName]! - 1;
-                                              } else {
-                                                counters[itemName] = 0;
-                                              }
-                                            });
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            fixedSize: Size(20, 20),
-                                            padding: EdgeInsets.all(8),
-                                          ),
-                                          child: Icon(
-                                            Icons.remove,
-                                            size: 25
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                : mode == 2
-                                    ? Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          SizedBox(
-                                            width: 40,
-                                            height: 40,
-                                            child: ElevatedButton(
-                                              onPressed: () async {
-                                                foods["items"][key]["items"][index] = await editItem(foods["items"][key]["items"][index], 1);
-                                                refresh(1, foods);
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                fixedSize: Size(20, 20),
-                                                padding: EdgeInsets.all(8)
-                                              ),
-                                              child: Icon(
-                                                Icons.edit,
-                                                size: 25,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(width: 10),
-                                          SizedBox(
-                                            width: 40,
-                                            height: 40,
-                                            child: ElevatedButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  counters.remove(foods["items"][key]["items"][index]["name"]);
-                                                  foods["items"][key]["items"].removeAt(index);
-                                                });
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                fixedSize: Size(20, 20),
-                                                padding: EdgeInsets.all(8)
-                                              ),
-                                              child: Icon(
-                                                Icons.delete,
-                                                size: 25,
-                                                color: Colors.redAccent
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(width: allowReorderHandles() ? 16 : 0)
-                                        ],
-                                      )
-                                    : null,
-                          );
-                        },
-                        onReorder: (int oldIndex, int newIndex) {
-                          if (newIndex > oldIndex) newIndex -= 1;
-                          final item = foods["items"][key]["items"].removeAt(oldIndex);
-                          foods["items"][key]["items"].insert(newIndex, item);
-                          refresh(1, foods);
-                        },
-                      ),
-                    ),
-                    mode == 1
-                    ? Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 12, right: 12, top: 0, bottom: 12),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(0.0),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.add,
-                                    size: 22
-                                  ),
-                                  SizedBox(width: 6.0),
-                                  Text(
-                                    "Extra:",
-                                    style: TextStyle(
-                                      fontSize: 20
-                                    )
-                                  ),
-                                  Spacer(),
-                                  Expanded(
-                                    child: TextField(
-                                      controller: _extraController,
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        hintText: 'Extra ${unit["init"]}...',
-                                      ),
-                                      onChanged: (value) {
+                                    ),
+                                    InkWell(
+                                      borderRadius: BorderRadius.circular(12),
+                                      onTap: () async {
+                                        var response =
+                                            await _showNumberInputDialog(
+                                                context, counters[itemName]!);
                                         setState(() {
-                                          double parsedValue = double.tryParse(_extraController.text) ?? 0;
-                                          extraAmount = validateNumber(parsedValue) ? parsedValue : 0;
+                                          if (response != null &&
+                                              validateNumber(response)) {
+                                            counters[itemName] = response;
+                                          }
                                         });
                                       },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(8.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.transparent,
+                                        ),
+                                        child: Text(
+                                          (() {
+                                            if (counters[itemName] == null) {
+                                              counters[itemName] = 0;
+                                            }
+                                            return formatDouble(
+                                                    counters[itemName]!)
+                                                .toString();
+                                          })(),
+                                          style: TextStyle(fontSize: 20.0),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 40,
+                                      height: 40,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            if (validateNumber(
+                                                counters[itemName]! - 1)) {
+                                              counters[itemName] =
+                                                  counters[itemName]! - 1;
+                                            } else {
+                                              counters[itemName] = 0;
+                                            }
+                                          });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          fixedSize: Size(20, 20),
+                                          padding: EdgeInsets.all(8),
+                                        ),
+                                        child: Icon(Icons.remove, size: 25),
+                                      ),
                                     )
-                                  )
-                                ]
-                              )
+                                  ],
+                                )
+                              : mode == 2
+                                  ? Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        SizedBox(
+                                          width: 40,
+                                          height: 40,
+                                          child: ElevatedButton(
+                                            onPressed: () async {
+                                              foods["items"][key]["items"]
+                                                      [index] =
+                                                  await editItem(
+                                                      foods["items"][key]
+                                                          ["items"][index],
+                                                      1);
+                                              refresh(1, foods);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                                fixedSize: Size(20, 20),
+                                                padding: EdgeInsets.all(8)),
+                                            child: Icon(
+                                              Icons.edit,
+                                              size: 25,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 10),
+                                        SizedBox(
+                                          width: 40,
+                                          height: 40,
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                counters.remove(foods["items"]
+                                                        [key]["items"][index]
+                                                    ["name"]);
+                                                foods["items"][key]["items"]
+                                                    .removeAt(index);
+                                              });
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                                fixedSize: Size(20, 20),
+                                                padding: EdgeInsets.all(8)),
+                                            child: Icon(Icons.delete,
+                                                size: 25,
+                                                color: Colors.redAccent),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                            width:
+                                                allowReorderHandles() ? 16 : 0)
+                                      ],
+                                    )
+                                  : null,
+                        );
+                      },
+                      onReorder: (int oldIndex, int newIndex) {
+                        if (newIndex > oldIndex) newIndex -= 1;
+                        final item =
+                            foods["items"][key]["items"].removeAt(oldIndex);
+                        foods["items"][key]["items"].insert(newIndex, item);
+                        refresh(1, foods);
+                      },
+                    ),
+                  ),
+                  mode == 1
+                      ? Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 12, right: 12, top: 0, bottom: 12),
+                            child: Column(
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.all(0.0),
+                                    child: Row(children: [
+                                      Icon(Icons.add, size: 22),
+                                      SizedBox(width: 6.0),
+                                      Text("Extra:",
+                                          style: TextStyle(fontSize: 20)),
+                                      Spacer(),
+                                      Expanded(
+                                          child: TextField(
+                                        controller: _extraController,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          hintText: 'Extra ${unit["init"]}...',
+                                        ),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            double parsedValue =
+                                                double.tryParse(_extraController
+                                                        .text) ??
+                                                    0;
+                                            extraAmount =
+                                                validateNumber(parsedValue)
+                                                    ? parsedValue
+                                                    : 0;
+                                          });
+                                        },
+                                      ))
+                                    ])),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 0, right: 0, top: 10, bottom: 0),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.restaurant, size: 22),
+                                      SizedBox(width: 6.0),
+                                      Text("Total:",
+                                          style: TextStyle(fontSize: 20)),
+                                      Spacer(),
+                                      Text(
+                                          "${formatDouble(calculateTotal(foods))}${unit["abbr"]}",
+                                          style: TextStyle(fontSize: 20)),
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 0),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.restaurant,
-                                    size: 22
+                          ),
+                        )
+                      : Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 12, right: 12, top: 0, bottom: 18),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 0, right: 0, top: 10, bottom: 0),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.restaurant, size: 22),
+                                      SizedBox(width: 6.0),
+                                      Text("Total:",
+                                          style: TextStyle(fontSize: 20)),
+                                      Spacer(),
+                                      Text(
+                                          "${(foods["items"][key]["items"].length).toString()} items",
+                                          style: TextStyle(fontSize: 20))
+                                    ],
                                   ),
-                                  SizedBox(width: 6.0),
-                                  Text(
-                                    "Total:",
-                                    style: TextStyle(
-                                      fontSize: 20
-                                    )
-                                  ),
-                                  Spacer(),
-                                  Text(
-                                    "${formatDouble(calculateTotal(foods))}${unit["abbr"]}",
-                                    style: TextStyle(
-                                      fontSize: 20
-                                    )
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                    : Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 12, right: 12, top: 0, bottom: 18),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 0),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.restaurant,
-                                    size: 22
-                                  ),
-                                  SizedBox(width: 6.0),
-                                  Text(
-                                    "Total:",
-                                    style: TextStyle(
-                                      fontSize: 20
-                                    )
-                                  ),
-                                  Spacer(),
-                                  Text(
-                                    "${(foods["items"][key]["items"].length).toString()} items",
-                                    style: TextStyle(
-                                      fontSize: 20
-                                    )
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ]
-            ),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                ],
+              ),
+            ]),
           );
         }
       },
@@ -1035,9 +1076,12 @@ class _FoodsWidgetState extends State<FoodsWidget> {
   Future<Map> editItem(food, int mode) async {
     print("edit food: initializing");
 
-    final TextEditingController stringController = TextEditingController(text: food["name"]);
-    final TextEditingController numberController = TextEditingController(text: formatDouble(food["value"].toDouble()).toString());
-    final TextEditingController servingController = TextEditingController(text: food.containsKey("serving") ? food["serving"] : "serving");
+    final TextEditingController stringController =
+        TextEditingController(text: food["name"]);
+    final TextEditingController numberController = TextEditingController(
+        text: formatDouble(food["value"].toDouble()).toString());
+    final TextEditingController servingController = TextEditingController(
+        text: food.containsKey("serving") ? food["serving"] : "serving");
 
     bool useValues = false;
 
@@ -1066,7 +1110,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                   const SizedBox(height: 10),
                   TextField(
                     controller: servingController,
-                    decoration: const InputDecoration(labelText: 'Serving size'),
+                    decoration:
+                        const InputDecoration(labelText: 'Serving size'),
                   ),
                 ],
               );
@@ -1095,12 +1140,17 @@ class _FoodsWidgetState extends State<FoodsWidget> {
     if (useValues) {
       print("edit food: using values");
 
-      String name = stringController.text == '' ? food["name"] : stringController.text;
-      String serving = servingController.text == '' ? food.containsKey("serving") ? food["serving"] : "serving" : servingController.text;
+      String name =
+          stringController.text == '' ? food["name"] : stringController.text;
+      String serving = servingController.text == ''
+          ? food.containsKey("serving")
+              ? food["serving"]
+              : "serving"
+          : servingController.text;
       double? inputNumber = double.tryParse(numberController.text);
-      double value = (inputNumber != null && validateNumber(inputNumber)) 
-        ? inputNumber 
-        : food["value"];
+      double value = (inputNumber != null && validateNumber(inputNumber))
+          ? inputNumber
+          : food["value"];
 
       food["name"] = name;
       food["value"] = value;
@@ -1116,7 +1166,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
   Future<Map> editMode(Map foods, bool deleteButton) async {
     print("edit mode: initializing");
 
-    final TextEditingController stringController = TextEditingController(text: key);
+    final TextEditingController stringController =
+        TextEditingController(text: key);
 
     bool useValues = false;
     bool delete = false;
@@ -1146,16 +1197,18 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                   const SizedBox(height: 10),
                   DropdownButtonFormField<Object>(
                     value: selectedOption,
-                    items: units.map((option) => DropdownMenuItem(
-                      value: option,
-                      child: Row(
-                        children: [
-                          Text(
-                            "${toSentenceCase(option['name'])} - ${option["unit"]}",
-                          ),
-                        ],
-                      ),
-                    )).toList(),
+                    items: units
+                        .map((option) => DropdownMenuItem(
+                              value: option,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "${toSentenceCase(option['name'])} - ${option["unit"]}",
+                                  ),
+                                ],
+                              ),
+                            ))
+                        .toList(),
                     onChanged: (value) {
                       setState(() {
                         selectedOption = value as Map;
@@ -1168,14 +1221,16 @@ class _FoodsWidgetState extends State<FoodsWidget> {
             },
           ),
           actions: [
-            deleteButton ? TextButton(
-              onPressed: () {
-                useValues = false;
-                delete = true;
-                Navigator.of(context).pop();
-              },
-              child: const Text('Delete'),
-            ) : SizedBox.shrink(),
+            deleteButton
+                ? TextButton(
+                    onPressed: () {
+                      useValues = false;
+                      delete = true;
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Delete'),
+                  )
+                : SizedBox.shrink(),
             TextButton(
               onPressed: () {
                 useValues = false;
@@ -1232,7 +1287,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
 
     if (delete) {
       print("edit mode: deleting values by conf");
-      bool? response = await showConfirmDialogue(context, "Confirm Action", "Are you sure you want to delete the mode $key? All the foods in it will be deleted. This cannot be undone.");
+      bool? response = await showConfirmDialogue(context, "Confirm Action",
+          "Are you sure you want to delete the mode $key? All the foods in it will be deleted. This cannot be undone.");
       if (response != null) {
         if (response) {
           foods["items"].remove(key);
@@ -1277,7 +1333,8 @@ class _CalculationsPageState extends State<CalculationsPage> {
     double total = 0;
 
     for (int i = 0; i < counterKeys.length; i++) {
-      double value = widget.data["items"][widget.keyS]["items"][i]["value"].toDouble();
+      double value =
+          widget.data["items"][widget.keyS]["items"][i]["value"].toDouble();
       double amount = widget.counters[counterKeys[i]]!;
       total = total + (value * amount);
     }
@@ -1290,136 +1347,101 @@ class _CalculationsPageState extends State<CalculationsPage> {
   }
 
   String getCalculationsText(List items, Map counters) {
-    String text = "CarbCalc Calculations\nAutomatically generated by user input\n";
+    String text =
+        "CarbCalc Calculations\nAutomatically generated by user input\n";
 
     items.forEach((item) {
-      text += "\n${item["name"]} (${item["value"].toDouble()}${widget.unit["abbr"]}$per${item.containsKey("serving") ? item["serving"] : "serving"}): ${counters[item["name"]]} servings, ${counters[item["name"]] * item["value"]}${widget.unit["abbr"]} total";
+      text +=
+          "\n${item["name"]} (${item["value"].toDouble()}${widget.unit["abbr"]}$per${item.containsKey("serving") ? item["serving"] : "serving"}): ${counters[item["name"]]} servings, ${counters[item["name"]] * item["value"]}${widget.unit["abbr"]} total";
     });
 
-    text += "\n\nExtra: ${widget.extraAmount}${widget.unit["abbr"]}\nSubtotal: ${calculateTotal(2)}${widget.unit["abbr"]}\nTotal: ${calculateTotal(1)}${widget.unit["abbr"]}";
+    text +=
+        "\n\nExtra: ${widget.extraAmount}${widget.unit["abbr"]}\nSubtotal: ${calculateTotal(2)}${widget.unit["abbr"]}\nTotal: ${calculateTotal(1)}${widget.unit["abbr"]}";
     return text;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {Navigator.pop(context);},
-          icon: Icon(Icons.arrow_back)
-        ),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              String result = getCalculationsText(widget.data["items"][widget.keyS]["items"], widget.counters);
-              shareFile(true, "CarbCalc Calculations", await File('result.txt').writeAsString(result), result);
-            },
-            icon: Icon(Icons.ios_share),
-          ),
-        ],
-        title: Text("Calculations"),
-        centerTitle: true
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: widget.data["items"][widget.keyS]["items"].length,
-              itemBuilder: (context, index) {
-                Map currentItem = widget.data["items"][widget.keyS]["items"][index];
-                return ListTile(
-                  title: Text(
-                    widget.data["items"][widget.keyS]["items"][index]["name"],
-                    style: TextStyle(
-                      fontSize: 15
-                    )
-                  ),
-                  subtitle: Text(
-                    "${widget.data["items"][widget.keyS]["items"][index]["value"].toDouble()}${widget.unit["abbr"]}$per${currentItem.containsKey("serving") ? currentItem["serving"] : "serving"}",
-                    style: TextStyle(
-                      fontSize: 15
-                    )
-                  ),
-                  trailing: Column(
-                    children: [
-                      Text(
-                        "${widget.counters[widget.data["items"][widget.keyS]["items"][index]["name"]]} servings",
-                        style: TextStyle(
-                          fontSize: 15
-                        )
-                      ),
-                      Text(
-                        "${widget.counters[widget.data["items"][widget.keyS]["items"][index]["name"]] * widget.data["items"][widget.keyS]["items"][index]["value"]}${widget.unit["abbr"]} total",
-                        style: TextStyle(
-                          fontSize: 15
-                        ),
-                      )
-                    ],
-                  )
-                );
-              }
-            )
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
+        appBar: AppBar(
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back)),
+            actions: [
+              IconButton(
+                onPressed: () async {
+                  String result = getCalculationsText(
+                      widget.data["items"][widget.keyS]["items"],
+                      widget.counters);
+                  shareFile(true, "CarbCalc Calculations",
+                      await File('result.txt').writeAsString(result), result);
+                },
+                icon: Icon(Icons.ios_share),
+              ),
+            ],
+            title: Text("Calculations"),
+            centerTitle: true),
+        body: Column(
+          children: [
+            Expanded(
+                child: ListView.builder(
+                    itemCount:
+                        widget.data["items"][widget.keyS]["items"].length,
+                    itemBuilder: (context, index) {
+                      Map currentItem =
+                          widget.data["items"][widget.keyS]["items"][index];
+                      return ListTile(
+                          title: Text(
+                              widget.data["items"][widget.keyS]["items"][index]
+                                  ["name"],
+                              style: TextStyle(fontSize: 15)),
+                          subtitle: Text(
+                              "${widget.data["items"][widget.keyS]["items"][index]["value"].toDouble()}${widget.unit["abbr"]}$per${currentItem.containsKey("serving") ? currentItem["serving"] : "serving"}",
+                              style: TextStyle(fontSize: 15)),
+                          trailing: Column(
+                            children: [
+                              Text(
+                                  "${widget.counters[widget.data["items"][widget.keyS]["items"][index]["name"]]} servings",
+                                  style: TextStyle(fontSize: 15)),
+                              Text(
+                                "${widget.counters[widget.data["items"][widget.keyS]["items"][index]["name"]] * widget.data["items"][widget.keyS]["items"][index]["value"]}${widget.unit["abbr"]} total",
+                                style: TextStyle(fontSize: 15),
+                              )
+                            ],
+                          ));
+                    })),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(children: [
                 Row(
                   children: [
-                    Text(
-                      "Extra:",
-                      style: TextStyle(
-                        fontSize: 18
-                      )
-                    ),
+                    Text("Extra:", style: TextStyle(fontSize: 18)),
                     Spacer(),
-                    Text(
-                      "${widget.extraAmount}${widget.unit["abbr"]}",
-                      style: TextStyle(
-                        fontSize: 18
-                      )
-                    ),
+                    Text("${widget.extraAmount}${widget.unit["abbr"]}",
+                        style: TextStyle(fontSize: 18)),
                   ],
                 ),
                 Row(
                   children: [
-                    Text(
-                      "Subtotal:",
-                      style: TextStyle(
-                        fontSize: 18
-                      )
-                    ),
+                    Text("Subtotal:", style: TextStyle(fontSize: 18)),
                     Spacer(),
-                    Text(
-                      "${calculateTotal(2)}${widget.unit["abbr"]}",
-                      style: TextStyle(
-                        fontSize: 18
-                      )
-                    )
+                    Text("${calculateTotal(2)}${widget.unit["abbr"]}",
+                        style: TextStyle(fontSize: 18))
                   ],
                 ),
                 Row(
                   children: [
-                    Text(
-                      "Total:",
-                      style: TextStyle(
-                        fontSize: 18
-                      )
-                    ),
+                    Text("Total:", style: TextStyle(fontSize: 18)),
                     Spacer(),
-                    Text(
-                      "${calculateTotal(1)}${widget.unit["abbr"]}",
-                      style: TextStyle(
-                        fontSize: 18
-                      )
-                    )
+                    Text("${calculateTotal(1)}${widget.unit["abbr"]}",
+                        style: TextStyle(fontSize: 18))
                   ],
                 )
-              ]
-            ),
-          )
-        ],
-      )
-    );
+              ]),
+            )
+          ],
+        ));
   }
 }
