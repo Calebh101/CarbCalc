@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:carbcalc/pages/homescreen.dart';
 import 'package:carbcalc/pages/settingscreen.dart';
 import 'package:flutter/rendering.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:icons_plus/icons_plus.dart';
 import 'package:quick_navbar/quick_navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:localpkg/theme.dart';
@@ -42,17 +44,17 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'CarbCalc',
       theme: customTheme(darkMode: false, seedColor: Colors.orange),
-      darkTheme: customTheme(darkMode: false, seedColor: Colors.orange),
+      darkTheme: customTheme(darkMode: true, seedColor: Colors.orange, iconSize: 12),
       themeMode: ThemeMode.system,
       home: QuickNavBar(items: [
         {
           "label": "Home",
-          "icon": Icons.home,
+          "icon": FontAwesomeIcons.house,
           "widget": HomeScreen(),
         },
         {
           "label": "Settings",
-          "icon": Icons.settings,
+          "icon": FontAwesomeIcons.gear,
           "widget": SettingsScreen(),
         },
       ], selectedColor: Colors.orange, sidebarBeta: true),
@@ -115,4 +117,16 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+Widget CustomFontAwesomeIcon({
+  FontAwesomeIconData? icon,
+  Color? color,
+  double size = 24,
+}) {
+  return FaIcon(
+    icon,
+    color: color,
+    size: size,
+  );
 }

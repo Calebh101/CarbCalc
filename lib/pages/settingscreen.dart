@@ -5,6 +5,7 @@ import 'package:carbcalc/util/convert.dart';
 import 'package:carbcalc/util/var.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:localpkg/functions.dart';
 import 'package:localpkg/widgets.dart';
 import 'package:localpkg/dialogue.dart';
@@ -147,7 +148,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         onPressed: () {
           openUrlConf(context, Uri.parse("mailto:calebh101dev@icloud.com"));
         },
-        child: Icon(Icons.feedback_outlined),
+        child: Icon(FontAwesomeIcons.message),
       ),
     );
   }

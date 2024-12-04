@@ -33,7 +33,7 @@ dependencies:
 
   localpkg:
     git:
-      url: https://github.com/Calebh101/localpkg-flutter.git
+      url: https://github.com/Calebh101/localpkg-flutter
       ref: main
 
   icons_plus: ^5.0.0
@@ -47,6 +47,7 @@ dependencies:
   app_settings: ^5.1.1
   open_settings_plus: ^0.4.0
   quick_navbar: ^1.1.2
+  font_awesome_flutter: ^10.8.0
 
 dev_dependencies:
   flutter_test:

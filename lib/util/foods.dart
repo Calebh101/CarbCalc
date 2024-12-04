@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:carbcalc/util/convert.dart';
 import 'package:carbcalc/util/func.dart';
 import 'package:carbcalc/util/var.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:localpkg/functions.dart';
 import 'package:localpkg/dialogue.dart';
@@ -161,25 +162,6 @@ class _FoodsWidgetState extends State<FoodsWidget> {
     print("FOODS.DART");
     init();
     super.initState();
-  }
-
-  IconData? getIcon(String? icon, bool selected) {
-    icon ??= "unknown";
-
-    switch (icon) {
-      case "unknown":
-        return !allowNoIcon
-            ? selected
-                ? Icons.question_mark
-                : Icons.question_mark_outlined
-            : null;
-      case "fast food":
-        return selected ? Icons.fastfood : Icons.fastfood_outlined;
-      case "pizza":
-        return selected ? Icons.local_pizza : Icons.local_pizza_outlined;
-      default:
-        return selected ? Icons.question_mark : Icons.question_mark_outlined;
-    }
   }
 
   void saveSortedList(List list, String mode, data) {
@@ -381,7 +363,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
               },
               child: Row(
                 children: [
-                  if (option.toLowerCase() == sortMode) Icon(Icons.check),
+                  if (option.toLowerCase() == sortMode) FaIcon(FontAwesomeIcons.check),
                   SizedBox(width: 8),
                   Text(option),
                 ],
@@ -411,7 +393,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
               },
               child: Row(
                 children: [
-                  if (option == sortMode) Icon(Icons.check),
+                  if (option == sortMode) FaIcon(FontAwesomeIcons.check),
                   SizedBox(width: 8),
                   Text(option),
                 ],
@@ -565,7 +547,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                   Tooltip(
                     message: "Show options",
                     child: PopupMenuButton(
-                      icon: Icon(Icons.more_vert),
+                      icon: FaIcon(FontAwesomeIcons.ellipsisVertical),
                       onSelected: (String value) async {
                         if (value == 'blank') {
                           print("blank action called");
@@ -692,8 +674,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                           value: "add",
                           child: Row(
                             children: [
-                              Icon(
-                                Icons.add,
+                              FaIcon(
+                                FontAwesomeIcons.plus,
                               ),
                               SizedBox(width: 6),
                               Text("Add"),
@@ -704,8 +686,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                           value: "edit",
                           child: Row(
                             children: [
-                              Icon(
-                                mode == 1 ? Icons.edit : Icons.calculate,
+                              FaIcon(
+                                mode == 1 ? FontAwesomeIcons.penToSquare : FontAwesomeIcons.calculator,
                               ),
                               SizedBox(width: 6),
                               Text(
@@ -718,8 +700,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                           value: "sort",
                           child: Row(
                             children: [
-                              Icon(
-                                Icons.swap_vert,
+                              FaIcon(
+                                FontAwesomeIcons.sort,
                               ),
                               SizedBox(width: 6),
                               Text("Sort"),
@@ -730,8 +712,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                           value: "modeChange",
                           child: Row(
                             children: [
-                              Icon(
-                                Icons.multiple_stop,
+                              FaIcon(
+                                FontAwesomeIcons.toggleOn,
                               ),
                               SizedBox(width: 6),
                               Text("Change Mode"),
@@ -742,8 +724,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                           value: "modeEdit",
                           child: Row(
                             children: [
-                              Icon(
-                                Icons.edit,
+                              FaIcon(
+                                FontAwesomeIcons.penToSquare,
                               ),
                               SizedBox(width: 6),
                               Text("Edit Mode"),
@@ -754,8 +736,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                           value: "refresh",
                           child: Row(
                             children: [
-                              Icon(
-                                Icons.refresh,
+                              FaIcon(
+                                FontAwesomeIcons.arrowsRotate,
                               ),
                               SizedBox(width: 6),
                               Text("Refresh")
@@ -766,8 +748,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                           value: "calculate",
                           child: Row(
                             children: [
-                              Icon(
-                                Icons.calculate,
+                              FaIcon(
+                                FontAwesomeIcons.calculator,
                               ),
                               SizedBox(width: 6),
                               Text("Calculations"),
@@ -778,8 +760,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                           value: "blank",
                           child: Row(
                             children: [
-                              Icon(
-                                Icons.close,
+                              FaIcon(
+                                FontAwesomeIcons.xmark,
                               ),
                               SizedBox(width: 6),
                               Text("Close"),
@@ -813,7 +795,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                             children: [
                               counters[itemName] != 0 && mode == 1
                                   ? IconButton(
-                                      icon: Icon(Icons.check_box_outlined),
+                                      icon: FaIcon(FontAwesomeIcons.squareCheck),
                                       iconSize: 25,
                                       onPressed: () {
                                         setState(() {
@@ -822,8 +804,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                       })
                                   : mode == 1
                                       ? IconButton(
-                                          icon: Icon(
-                                              Icons.check_box_outline_blank),
+                                          icon: FaIcon(
+                                              FontAwesomeIcons.squareCheck),
                                           iconSize: 25,
                                           onPressed: () {
                                             setState(() {
@@ -871,7 +853,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                         style: ElevatedButton.styleFrom(
                                           padding: EdgeInsets.all(8),
                                         ),
-                                        child: Icon(Icons.add, size: 25),
+                                        child: FaIcon(FontAwesomeIcons.plus, size: 25),
                                       ),
                                     ),
                                     InkWell(
@@ -924,7 +906,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                           fixedSize: Size(20, 20),
                                           padding: EdgeInsets.all(8),
                                         ),
-                                        child: Icon(Icons.remove, size: 25),
+                                        child: FaIcon(FontAwesomeIcons.minus, size: 25),
                                       ),
                                     )
                                   ],
@@ -949,8 +931,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                             style: ElevatedButton.styleFrom(
                                                 fixedSize: Size(20, 20),
                                                 padding: EdgeInsets.all(8)),
-                                            child: Icon(
-                                              Icons.edit,
+                                            child: FaIcon(
+                                              FontAwesomeIcons.penToSquare,
                                               size: 25,
                                               color: Colors.white,
                                             ),
@@ -973,7 +955,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                             style: ElevatedButton.styleFrom(
                                                 fixedSize: Size(20, 20),
                                                 padding: EdgeInsets.all(8)),
-                                            child: Icon(Icons.delete,
+                                            child: FaIcon(FontAwesomeIcons.trash,
                                                 size: 25,
                                                 color: Colors.redAccent),
                                           ),
@@ -1006,7 +988,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                 Padding(
                                     padding: const EdgeInsets.all(0.0),
                                     child: Row(children: [
-                                      Icon(Icons.add, size: 22),
+                                      FaIcon(FontAwesomeIcons.plus, size: 22),
                                       SizedBox(width: 6.0),
                                       Text("Extra:",
                                           style: TextStyle(fontSize: 20)),
@@ -1037,7 +1019,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                       left: 0, right: 0, top: 10, bottom: 0),
                                   child: Row(
                                     children: [
-                                      Icon(Icons.restaurant, size: 22),
+                                      FaIcon(FontAwesomeIcons.kitchenSet, size: 22),
                                       SizedBox(width: 6.0),
                                       Text("Total:",
                                           style: TextStyle(fontSize: 20)),
@@ -1064,7 +1046,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                       left: 0, right: 0, top: 10, bottom: 0),
                                   child: Row(
                                     children: [
-                                      Icon(Icons.restaurant, size: 22),
+                                      FaIcon(FontAwesomeIcons.kitchenSet, size: 22),
                                       SizedBox(width: 6.0),
                                       Text("Total:",
                                           style: TextStyle(fontSize: 20)),
@@ -1387,7 +1369,7 @@ class _CalculationsPageState extends State<CalculationsPage> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: Icon(Icons.arrow_back)),
+                icon: FaIcon(FontAwesomeIcons.backward)),
             actions: [
               IconButton(
                 onPressed: () async {
@@ -1396,7 +1378,7 @@ class _CalculationsPageState extends State<CalculationsPage> {
                       widget.counters);
                   shareTextFile(true, "CarbCalc Calculations", result, "txt");
                 },
-                icon: Icon(Icons.ios_share),
+                icon: Icon(FontAwesomeIcons.share),
               ),
             ],
             title: Text("Calculations"),

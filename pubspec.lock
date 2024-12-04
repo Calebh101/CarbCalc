@@ -184,6 +184,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  font_awesome_flutter:
+    dependency: "direct main"
+    description:
+      name: font_awesome_flutter
+      sha256: d3a89184101baec7f4600d58840a764d2ef760fe1c5a20ef9e6b0e9b24a07a3a
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.8.0"
   google_fonts:
     dependency: transitive
     description:
@@ -309,8 +317,8 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "7be457347a6fd775a8f7e9318ebec5ae9fc0d0b9"
-      url: "https://github.com/Calebh101/localpkg-flutter.git"
+      resolved-ref: "16f72a6e9ad37fa61a5e46e6036e3f9caba9bd39"
+      url: "https://github.com/Calebh101/localpkg-flutter"
     source: git
     version: "1.0.0"
   matcher:
