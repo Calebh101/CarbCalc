@@ -5,6 +5,7 @@ import 'package:carbcalc/pages/settingscreen.dart';
 import 'package:flutter/rendering.dart';
 import 'package:quick_navbar/quick_navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:localpkg/theme.dart';
 
 late Future<Map<String, dynamic>> cache;
 
@@ -40,20 +41,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'CarbCalc',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.orange,
-          brightness: Brightness.light
-        ),
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.orange,
-          brightness: Brightness.dark
-        ),
-        useMaterial3: true,
-      ),
+      theme: customTheme(darkMode: false, seedColor: Colors.orange),
+      darkTheme: customTheme(darkMode: false, seedColor: Colors.orange),
       themeMode: ThemeMode.system,
       home: QuickNavBar(items: [
         {
@@ -66,7 +55,7 @@ class MyApp extends StatelessWidget {
           "icon": Icons.settings,
           "widget": SettingsScreen(),
         },
-      ], selectedColor: Colors.orange),
+      ], selectedColor: Colors.orange, sidebarBeta: true),
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:carbcalc/util/var.dart';
-import 'package:personal/dialogue.dart';
+import 'package:localpkg/dialogue.dart';
 
 void showBetaWarning(context, bool overrideWarningBool) {
   if (beta && (betaWarning || overrideWarningBool)) {

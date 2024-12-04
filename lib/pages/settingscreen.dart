@@ -5,9 +5,9 @@ import 'package:carbcalc/util/convert.dart';
 import 'package:carbcalc/util/var.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:personal/functions.dart';
-import 'package:personal/widgets.dart';
-import 'package:personal/dialogue.dart';
+import 'package:localpkg/functions.dart';
+import 'package:localpkg/widgets.dart';
+import 'package:localpkg/dialogue.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {

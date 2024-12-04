@@ -184,6 +184,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  google_fonts:
+    dependency: transitive
+    description:
+      name: google_fonts
+      sha256: b1ac0fe2832c9cc95e5e88b57d627c5e68c223b9657f4b96e1487aa9098c7b82
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.2.1"
   http:
     dependency: transitive
     description:
@@ -216,6 +224,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.3.0"
+  in_app_purchase:
+    dependency: transitive
+    description:
+      name: in_app_purchase
+      sha256: "960f26a08d9351fb8f89f08901f8a829d41b04d45a694b8f776121d9e41dcad6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.0"
+  in_app_purchase_android:
+    dependency: transitive
+    description:
+      name: in_app_purchase_android
+      sha256: fa1befc0e25374d16ca532154546503f25a865ed6e7ea5641f4f2b75b092d669
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.6+12"
+  in_app_purchase_platform_interface:
+    dependency: transitive
+    description:
+      name: in_app_purchase_platform_interface
+      sha256: "1d353d38251da5b9fea6635c0ebfc6bb17a2d28d0e86ea5e083bf64244f1fb4c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
+  in_app_purchase_storekit:
+    dependency: transitive
+    description:
+      name: in_app_purchase_storekit
+      sha256: "250b3865da1f4abf0d0e1eda9556734ee22ab5ebfe47a59227d8d9aeaa1c03e8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.20+2"
   intl:
     dependency: "direct main"
     description:
@@ -264,6 +304,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  localpkg:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: main
+      resolved-ref: "7be457347a6fd775a8f7e9318ebec5ae9fc0d0b9"
+      url: "https://github.com/Calebh101/localpkg-flutter.git"
+    source: git
+    version: "1.0.0"
   matcher:
     dependency: transitive
     description:
@@ -376,15 +425,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
-  personal:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: main
-      resolved-ref: "8a0fecb2df96e54a244558a91494fcab1a3c985a"
-      url: "https://github.com/Calebh101/localpkg-flutter"
-    source: git
-    version: "1.0.1"
   petitparser:
     dependency: transitive
     description:
@@ -421,10 +461,10 @@ packages:
     dependency: "direct main"
     description:
       name: quick_navbar
-      sha256: "0945a64cc019ac2bb9f3c0db72dcde87bcb35b6a94af817da95c5019e4e31729"
+      sha256: b349e34b03b04fe460e665f95cd48538f352a3a69044ba48e1228376f49034ad
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.4"
+    version: "1.1.2"
   share_plus:
     dependency: "direct main"
     description:

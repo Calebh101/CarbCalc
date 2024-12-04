@@ -4,8 +4,8 @@ import 'package:carbcalc/util/convert.dart';
 import 'package:carbcalc/util/func.dart';
 import 'package:carbcalc/util/var.dart';
 
-import 'package:personal/functions.dart';
-import 'package:personal/dialogue.dart';
+import 'package:localpkg/functions.dart';
+import 'package:localpkg/dialogue.dart';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -536,15 +536,31 @@ class _FoodsWidgetState extends State<FoodsWidget> {
           print("unit: $unit");
 
           return Scaffold(
-            appBar: AppBar(
-                leading: Tooltip(
-                  message: "Switch mode",
-                  child: IconButton(
-                      onPressed: () {
-                        selectMode(context, foods);
+            drawer: Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      'Modes',
+                      style: TextStyle(
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                  for (var item in keys) 
+                    ListTile(
+                      title: Text(item),
+                      onTap: () {
+                        Navigator.pop(context);
+                        changeMode(item, foods);
                       },
-                      icon: Icon(Icons.menu)),
-                ),
+                    ),
+                ],
+              ),
+            ),
+            appBar: AppBar(
                 actions: [
                   Tooltip(
                     message: "Show options",
@@ -1154,6 +1170,10 @@ class _FoodsWidgetState extends State<FoodsWidget> {
       food["name"] = name;
       food["value"] = value;
       food["serving"] = serving;
+
+      if (mode == 2) {
+        counters[name] = 1;
+      }
     } else {
       print("edit food: not using values");
     }

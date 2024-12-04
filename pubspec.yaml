@@ -31,9 +31,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  personal:
+  localpkg:
     git:
-      url: https://github.com/Calebh101/localpkg-flutter
+      url: https://github.com/Calebh101/localpkg-flutter.git
       ref: main
 
   icons_plus: ^5.0.0
@@ -46,7 +46,7 @@ dependencies:
   file_picker: ^8.1.4
   app_settings: ^5.1.1
   open_settings_plus: ^0.4.0
-  quick_navbar: ^1.0.4
+  quick_navbar: ^1.1.2
 
 dev_dependencies:
   flutter_test:
