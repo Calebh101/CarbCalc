@@ -42,8 +42,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'CarbCalc',
-      theme: customTheme(darkMode: false, seedColor: Colors.orange, iconSize: 12),
-      darkTheme: customTheme(darkMode: true, seedColor: Colors.orange, iconSize: 12),
+      theme:
+          brandTheme(darkMode: false, seedColor: Colors.orange, iconSize: 12),
+      darkTheme: brandTheme(
+        darkMode: true,
+        seedColor: Colors.orange,
+        iconSize: 12,
+      ),
       themeMode: ThemeMode.system,
       home: QuickNavBar(items: [
         {
@@ -105,7 +110,6 @@ class _HomePageState extends State<HomePage> {
             label: 'Settings',
           ),
         ],
-
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.orange[800],
         onTap: _onItemTapped,

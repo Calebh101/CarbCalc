@@ -364,7 +364,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
               },
               child: Row(
                 children: [
-                  if (option.toLowerCase() == sortMode) customFaIcon(FontAwesomeIcons.check),
+                  if (option.toLowerCase() == sortMode)
+                    customFaIcon(FontAwesomeIcons.check),
                   SizedBox(width: 8),
                   Text(option),
                 ],
@@ -532,7 +533,7 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                       ),
                     ),
                   ),
-                  for (var item in keys) 
+                  for (var item in keys)
                     ListTile(
                       title: Text(item),
                       onTap: () {
@@ -543,246 +544,243 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                 ],
               ),
             ),
-            appBar: AppBar(
-                actions: [
-                  Tooltip(
-                    message: "Show options",
-                    child: PopupMenuButton(
-                      icon: customFaIcon(FontAwesomeIcons.ellipsisVertical),
-                      onSelected: (String value) async {
-                        if (value == 'blank') {
-                          print("blank action called");
-                        } else if (value == 'refresh') {
-                          refresh(1, await getData());
-                        } else if (value == 'edit') {
-                          mode = mode == 1 ? 2 : 1;
-                          refresh(1, foods);
-                        } else if (value == 'add') {
-                          String? response = await showAddDialogue(context);
-                          Map? response2;
+            appBar: AppBar(actions: [
+              Tooltip(
+                message: "Show options",
+                child: PopupMenuButton(
+                  icon: customFaIcon(FontAwesomeIcons.ellipsisVertical),
+                  onSelected: (String value) async {
+                    if (value == 'blank') {
+                      print("blank action called");
+                    } else if (value == 'refresh') {
+                      refresh(1, await getData());
+                    } else if (value == 'edit') {
+                      mode = mode == 1 ? 2 : 1;
+                      refresh(1, foods);
+                    } else if (value == 'add') {
+                      String? response = await showAddDialogue(context);
+                      Map? response2;
 
-                          if (response != null) {
-                            if (response == 'Mode') {
-                              response2 = {
-                                "name": await showTextInput(response)
-                              };
-                            } else if (response == 'Item') {
-                              response2 = await editItem(
-                                  {"name": "", "value": 0, "icon": ""}, 2);
-                            }
-                          }
-                          if (response2 == "error") {
-                            print("Error occurred with response2: unknown");
-                            showAlertDialogue(
-                                context,
-                                "Error",
-                                "There was an error with your response.",
-                                false,
-                                {"show": false});
-                          }
-                          if (response2 == "invalid") {
-                            print("Error occurred with response2: invalid");
-                            showAlertDialogue(
-                                context,
-                                "Error",
-                                "Your response was invalid.",
-                                false,
-                                {"show": false});
-                          }
-                          if (response != null &&
-                              (response2 != null && response2["name"] != '')) {
-                            setState(() {
-                              switch (response) {
-                                case "Item":
-                                  print("Item added: $response2");
-                                  foods["items"][key]["items"].add(response2);
-                                  saveData(foods);
-                                case "Mode":
-                                  print("Mode added: $response2");
-                                  foods["items"][response2!["name"]] = {
-                                    "items": [
-                                      {
-                                        "name": "My First Food",
-                                        "value": 0,
-                                        "icon": "fast food"
-                                      }
-                                    ]
-                                  };
-                                  changeMode(response2["name"]!, foods);
-                                  saveData(foods);
-                                default:
-                                  print(
-                                      "Unable to judge dialogue choice: $response");
-                                  showAlertDialogue(
-                                      context,
-                                      "Error",
-                                      "Unable to judge your chosen item.",
-                                      false,
-                                      {"show": false});
-                              }
-                            });
-                          }
-                        } else if (value == 'sort') {
-                          List sortOptions = [
-                            "Alphabetical (A to Z)",
-                            "Alphabetical (Z to A)",
-                            "Value (lowest to highest)",
-                            "Value (highest to lowest)"
-                          ];
-                          if (allowCustomReorder) {
-                            sortOptions.add("Custom");
-                          }
-
-                          sortMode = await _showSelectionDialog(
-                              context, sortOptions, "sorting option");
-
-                          if (sortMode != null) {
-                            sortMode = sortMode!.toLowerCase();
-                          } else {
-                            sortMode = "custom";
-                          }
-
-                          setState(() {
-                            print("sort: $sortMode");
-                            refresh(1, sortList(sortMode!, foods));
-                          });
-                        } else if (value == 'calculate') {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CalculationsPage(
-                                    data: foods,
-                                    counters: counters,
-                                    keyS: key,
-                                    extraAmount: extraAmount,
-                                    unit: unit)),
-                          );
-                        } else if (value == 'modeChange') {
-                          selectMode(context, foods);
-                        } else if (value == 'modeEdit') {
-                          foods = await editMode(foods, true);
-                          print(foods);
-                          refresh(1, foods);
-                          init();
-                        } else {
-                          print(
-                              "Unresolved condition: PopupMenuButton(value): $value");
+                      if (response != null) {
+                        if (response == 'Mode') {
+                          response2 = {"name": await showTextInput(response)};
+                        } else if (response == 'Item') {
+                          response2 = await editItem(
+                              {"name": "", "value": 0, "icon": ""}, 2);
                         }
-                      },
-                      itemBuilder: (BuildContext context) =>
-                          <PopupMenuEntry<String>>[
-                        PopupMenuItem(
-                          value: "add",
-                          child: Row(
-                            children: [
-                              customFaIcon(
-                                FontAwesomeIcons.plus,
-                                setWidth: 28,
-                              ),
-                              SizedBox(width: 6),
-                              Text("Add"),
-                            ],
+                      }
+                      if (response2 == "error") {
+                        print("Error occurred with response2: unknown");
+                        showAlertDialogue(
+                            context,
+                            "Error",
+                            "There was an error with your response.",
+                            false,
+                            {"show": false});
+                      }
+                      if (response2 == "invalid") {
+                        print("Error occurred with response2: invalid");
+                        showAlertDialogue(
+                            context,
+                            "Error",
+                            "Your response was invalid.",
+                            false,
+                            {"show": false});
+                      }
+                      if (response != null &&
+                          (response2 != null && response2["name"] != '')) {
+                        setState(() {
+                          switch (response) {
+                            case "Item":
+                              print("Item added: $response2");
+                              foods["items"][key]["items"].add(response2);
+                              saveData(foods);
+                            case "Mode":
+                              print("Mode added: $response2");
+                              foods["items"][response2!["name"]] = {
+                                "items": [
+                                  {
+                                    "name": "My First Food",
+                                    "value": 0,
+                                    "icon": "fast food"
+                                  }
+                                ]
+                              };
+                              changeMode(response2["name"]!, foods);
+                              saveData(foods);
+                            default:
+                              print(
+                                  "Unable to judge dialogue choice: $response");
+                              showAlertDialogue(
+                                  context,
+                                  "Error",
+                                  "Unable to judge your chosen item.",
+                                  false,
+                                  {"show": false});
+                          }
+                        });
+                      }
+                    } else if (value == 'sort') {
+                      List sortOptions = [
+                        "Alphabetical (A to Z)",
+                        "Alphabetical (Z to A)",
+                        "Value (lowest to highest)",
+                        "Value (highest to lowest)"
+                      ];
+                      if (allowCustomReorder) {
+                        sortOptions.add("Custom");
+                      }
+
+                      sortMode = await _showSelectionDialog(
+                          context, sortOptions, "sorting option");
+
+                      if (sortMode != null) {
+                        sortMode = sortMode!.toLowerCase();
+                      } else {
+                        sortMode = "custom";
+                      }
+
+                      setState(() {
+                        print("sort: $sortMode");
+                        refresh(1, sortList(sortMode!, foods));
+                      });
+                    } else if (value == 'calculate') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CalculationsPage(
+                                data: foods,
+                                counters: counters,
+                                keyS: key,
+                                extraAmount: extraAmount,
+                                unit: unit)),
+                      );
+                    } else if (value == 'modeChange') {
+                      selectMode(context, foods);
+                    } else if (value == 'modeEdit') {
+                      foods = await editMode(foods, true);
+                      print(foods);
+                      refresh(1, foods);
+                      init();
+                    } else {
+                      print(
+                          "Unresolved condition: PopupMenuButton(value): $value");
+                    }
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<String>>[
+                    PopupMenuItem(
+                      value: "add",
+                      child: Row(
+                        children: [
+                          customFaIcon(
+                            FontAwesomeIcons.plus,
+                            setWidth: 28,
                           ),
-                        ),
-                        PopupMenuItem(
-                          value: "edit",
-                          child: Row(
-                            children: [
-                              customFaIcon(
-                                mode == 1 ? FontAwesomeIcons.penToSquare : FontAwesomeIcons.calculator,
-                                setWidth: 28,
-                              ),
-                              SizedBox(width: 6),
-                              Text(
-                                mode == 1 ? "Edit" : "Calculate",
-                              ),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: "sort",
-                          child: Row(
-                            children: [
-                              customFaIcon(
-                                FontAwesomeIcons.sort,
-                                setWidth: 28,
-                              ),
-                              SizedBox(width: 6),
-                              Text("Sort"),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: "modeChange",
-                          child: Row(
-                            children: [
-                              customFaIcon(
-                                FontAwesomeIcons.toggleOn,
-                                setWidth: 28,
-                              ),
-                              SizedBox(width: 6),
-                              Text("Change Mode"),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: "modeEdit",
-                          child: Row(
-                            children: [
-                              customFaIcon(
-                                FontAwesomeIcons.penToSquare,
-                                setWidth: 28,
-                              ),
-                              SizedBox(width: 6),
-                              Text("Edit Mode"),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: "refresh",
-                          child: Row(
-                            children: [
-                              customFaIcon(
-                                FontAwesomeIcons.arrowsRotate,
-                                setWidth: 28,
-                              ),
-                              SizedBox(width: 6),
-                              Text("Refresh")
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: "calculate",
-                          child: Row(
-                            children: [
-                              customFaIcon(
-                                FontAwesomeIcons.calculator,
-                                setWidth: 28,
-                              ),
-                              SizedBox(width: 6),
-                              Text("Calculations"),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: "blank",
-                          child: Row(
-                            children: [
-                              customFaIcon(
-                                FontAwesomeIcons.xmark,
-                                setWidth: 28,
-                              ),
-                              SizedBox(width: 6),
-                              Text("Close"),
-                            ],
-                          ),
-                        ),
-                      ],
+                          SizedBox(width: 6),
+                          Text("Add"),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-                title: Text("${widget.title} - $key"),
-                centerTitle: true),
+                    PopupMenuItem(
+                      value: "edit",
+                      child: Row(
+                        children: [
+                          customFaIcon(
+                            mode == 1
+                                ? FontAwesomeIcons.penToSquare
+                                : FontAwesomeIcons.calculator,
+                            setWidth: 28,
+                          ),
+                          SizedBox(width: 6),
+                          Text(
+                            mode == 1 ? "Edit" : "Calculate",
+                          ),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: "sort",
+                      child: Row(
+                        children: [
+                          customFaIcon(
+                            FontAwesomeIcons.sort,
+                            setWidth: 28,
+                          ),
+                          SizedBox(width: 6),
+                          Text("Sort"),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: "modeChange",
+                      child: Row(
+                        children: [
+                          customFaIcon(
+                            FontAwesomeIcons.toggleOn,
+                            setWidth: 28,
+                          ),
+                          SizedBox(width: 6),
+                          Text("Change Mode"),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: "modeEdit",
+                      child: Row(
+                        children: [
+                          customFaIcon(
+                            FontAwesomeIcons.penToSquare,
+                            setWidth: 28,
+                          ),
+                          SizedBox(width: 6),
+                          Text("Edit Mode"),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: "refresh",
+                      child: Row(
+                        children: [
+                          customFaIcon(
+                            FontAwesomeIcons.arrowsRotate,
+                            setWidth: 28,
+                          ),
+                          SizedBox(width: 6),
+                          Text("Refresh")
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: "calculate",
+                      child: Row(
+                        children: [
+                          customFaIcon(
+                            FontAwesomeIcons.calculator,
+                            setWidth: 28,
+                          ),
+                          SizedBox(width: 6),
+                          Text("Calculations"),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: "blank",
+                      child: Row(
+                        children: [
+                          customFaIcon(
+                            FontAwesomeIcons.xmark,
+                            setWidth: 28,
+                          ),
+                          SizedBox(width: 6),
+                          Text("Close"),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ], title: Text("${widget.title} - $key"), centerTitle: true),
             body: Stack(children: [
               Column(
                 children: [
@@ -804,7 +802,8 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                             children: [
                               counters[itemName] != 0 && mode == 1
                                   ? IconButton(
-                                      icon: customFaIcon(FontAwesomeIcons.squareCheck),
+                                      icon: customFaIcon(
+                                          FontAwesomeIcons.squareCheck),
                                       iconSize: 25,
                                       onPressed: () {
                                         setState(() {
@@ -862,7 +861,9 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                         style: ElevatedButton.styleFrom(
                                           padding: EdgeInsets.all(8),
                                         ),
-                                        child: customFaIcon(FontAwesomeIcons.plus, size: 25),
+                                        child: customFaIcon(
+                                            FontAwesomeIcons.plus,
+                                            size: 25),
                                       ),
                                     ),
                                     InkWell(
@@ -915,7 +916,9 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                           fixedSize: Size(20, 20),
                                           padding: EdgeInsets.all(8),
                                         ),
-                                        child: customFaIcon(FontAwesomeIcons.minus, size: 25),
+                                        child: customFaIcon(
+                                            FontAwesomeIcons.minus,
+                                            size: 25),
                                       ),
                                     )
                                   ],
@@ -962,16 +965,18 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                             style: ElevatedButton.styleFrom(
                                                 fixedSize: Size(20, 20),
                                                 padding: EdgeInsets.all(8)),
-                                            child: customFaIcon(FontAwesomeIcons.trash,
+                                            child: customFaIcon(
+                                                FontAwesomeIcons.trash,
                                                 color: Colors.redAccent),
                                           ),
                                         ),
-                                        SizedBox(
-                                            width: 10),
+                                        SizedBox(width: 10),
                                         ReorderableDragStartListener(
-                                          index: index,
-                                          child: ElevatedButton(child: customFaIcon(FontAwesomeIcons.gripLines), onPressed: () {})
-                                        ),
+                                            index: index,
+                                            child: ElevatedButton(
+                                                child: customFaIcon(
+                                                    FontAwesomeIcons.gripLines),
+                                                onPressed: () {})),
                                       ],
                                     )
                                   : null,
@@ -997,7 +1002,16 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                 Padding(
                                     padding: const EdgeInsets.all(0.0),
                                     child: Row(children: [
-                                      customFaIcon(FontAwesomeIcons.plus, size: 22, setWidth: 30, color: WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark ? Colors.white : Colors.black),
+                                      customFaIcon(FontAwesomeIcons.plus,
+                                          size: 22,
+                                          setWidth: 30,
+                                          color: WidgetsBinding
+                                                      .instance
+                                                      .platformDispatcher
+                                                      .platformBrightness ==
+                                                  Brightness.dark
+                                              ? Colors.white
+                                              : Colors.black),
                                       SizedBox(width: 6.0),
                                       Text("Extra:",
                                           style: TextStyle(fontSize: 20)),
@@ -1028,7 +1042,16 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                       left: 0, right: 0, top: 10, bottom: 0),
                                   child: Row(
                                     children: [
-                                      customFaIcon(FontAwesomeIcons.kitchenSet, size: 22, setWidth: 30, color: WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark ? Colors.white : Colors.black),
+                                      customFaIcon(FontAwesomeIcons.kitchenSet,
+                                          size: 22,
+                                          setWidth: 30,
+                                          color: WidgetsBinding
+                                                      .instance
+                                                      .platformDispatcher
+                                                      .platformBrightness ==
+                                                  Brightness.dark
+                                              ? Colors.white
+                                              : Colors.black),
                                       SizedBox(width: 6.0),
                                       Text("Total:",
                                           style: TextStyle(fontSize: 20)),
@@ -1055,7 +1078,15 @@ class _FoodsWidgetState extends State<FoodsWidget> {
                                       left: 0, right: 0, top: 10, bottom: 0),
                                   child: Row(
                                     children: [
-                                      customFaIcon(FontAwesomeIcons.kitchenSet, setWidth: 30, color: WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark ? Colors.white : Colors.black),
+                                      customFaIcon(FontAwesomeIcons.kitchenSet,
+                                          setWidth: 30,
+                                          color: WidgetsBinding
+                                                      .instance
+                                                      .platformDispatcher
+                                                      .platformBrightness ==
+                                                  Brightness.dark
+                                              ? Colors.white
+                                              : Colors.black),
                                       SizedBox(width: 6.0),
                                       Text("Total:",
                                           style: TextStyle(fontSize: 20)),
